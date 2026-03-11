@@ -77,6 +77,19 @@ impl LeveledMphf {
     }
 
     pub fn new(keys: &[u64], seed: u64, offset: u64, expansion_factor: f64) -> Self {
+        Self::new_with_par_threshold(keys, seed, offset, expansion_factor, PAR_THRESHOLD)
+    }
+
+    /// same as [`new`](Self::new) but with a configurable parallelization threshold
+    /// levels with at least `par_threshold` keys use parallel work. smaller levels use serial
+    /// use `usize::MAX` to force serial construction
+    pub fn new_with_par_threshold(
+        keys: &[u64],
+        seed: u64,
+        offset: u64,
+        expansion_factor: f64,
+        par_threshold: usize,
+    ) -> Self {
         let size = keys.len();
         let splitmix = SplitMix64::new(seed, offset);
 
@@ -122,7 +135,7 @@ impl LeveledMphf {
                 // counting pass
                 // parallel path uses per-chunk histograms then parallel merge into par_counts (reused)
                 // sequential path uses seq_counts
-                let counts_ref: &[u8] = if cfg!(feature = "parallel") && n >= PAR_THRESHOLD {
+                let counts_ref: &[u8] = if cfg!(feature = "parallel") && n >= par_threshold {
                     #[cfg(feature = "parallel")]
                     {
                         let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
@@ -162,7 +175,7 @@ impl LeveledMphf {
                     &seq_counts[..num_slots]
                 };
 
-                let unique_count = if cfg!(feature = "parallel") && n >= PAR_THRESHOLD {
+                let unique_count = if cfg!(feature = "parallel") && n >= par_threshold {
                     #[cfg(feature = "parallel")]
                     {
                         counts_ref.par_iter().filter(|&&c| c == 1).count()
@@ -187,7 +200,7 @@ impl LeveledMphf {
                 // parallel path - thread-local vecs, then set bits sequentially and concat survivors.
                 let mut bs = BitSet::new(num_slots);
 
-                let next_keys: Vec<u64> = if cfg!(feature = "parallel") && n >= PAR_THRESHOLD {
+                let next_keys: Vec<u64> = if cfg!(feature = "parallel") && n >= par_threshold {
                     #[cfg(feature = "parallel")]
                     {
                         let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
