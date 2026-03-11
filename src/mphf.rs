@@ -1,8 +1,15 @@
 use core::panic;
 
+#[cfg(feature = "parallel")]
+use rayon::prelude::*;
+
 use crate::hash::SplitMix64;
 use crate::bitset::{RankedBitSet, BitSet};
 use crate::bitset::CACHE_LINE_BITS;
+
+/// Minimum number of keys before we spawn parallel work; below this, overhead dominates.
+// TODO: Test to find a good limit
+const PAR_THRESHOLD: usize = 4_096;
 
 struct LevelMeta {
     offset_multiplier: u64,
@@ -80,13 +87,16 @@ impl LeveledMphf {
         let mut current_offset_multiplier = 0u8;
         let mut items_placed_so_far = 0;
 
-        // num_slots is strictly deincreasing across levels, so allocate counts once at the maximum possible size
+        // num_slots is strictly decreasing across levels, so allocate counts once at the maximum possible size
         // reuse it every iteration by zeroing only the [..num_slots] prefix
         let max_slots = {
             let expanded = (size as f64 * expansion_factor).max(1.0) as usize;
             ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
         };
-        let mut counts = vec![0u8; max_slots];
+        let mut seq_counts = vec![0u8; max_slots];
+        #[cfg(feature = "parallel")]
+        // reused buffer for parallel path so we don't allocate a new Vec per level from reduce
+        let mut par_counts = vec![0u8; max_slots];
 
         while !remaining_keys.is_empty() {
             let n = remaining_keys.len();
@@ -107,16 +117,63 @@ impl LeveledMphf {
                     panic!("Exhausted all 255 offset multipliers after {} attempts! Try a different base seed.", num_attempts);
                 }
 
-                // zero out live prefixes
-                counts[..num_slots].fill(0);
-                // then hash and inc slot
-                for &k in &remaining_keys {
-                    let hash = splitmix.hash(k, current_offset_multiplier as u64);
-                    let bit_idx = ((hash as u128 * num_slots as u128) >> 64) as usize;
-                    counts[bit_idx] = counts[bit_idx].saturating_add(1);
-                }
+                let om = current_offset_multiplier as u64;
 
-                let unique_count = counts[..num_slots].iter().filter(|&&c| c == 1).count();
+                // counting pass
+                // parallel path uses per-chunk histograms then parallel merge into par_counts (reused)
+                // sequential path uses seq_counts
+                let counts_ref: &[u8] = if cfg!(feature = "parallel") && n >= PAR_THRESHOLD {
+                    #[cfg(feature = "parallel")]
+                    {
+                        let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
+                        let chunk_histograms: Vec<Vec<u8>> = remaining_keys
+                            .par_chunks(chunk_size)
+                            .map(|chunk| {
+                                let mut local = vec![0u8; num_slots];
+                                for &k in chunk {
+                                    let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+                                    local[bit_idx] = local[bit_idx].saturating_add(1);
+                                }
+                                local
+                            })
+                            .collect();
+                            // merge chunk histograms in parallel by slot index (avoids sequential tree-merge bottleneck).
+                        par_counts[..num_slots]
+                            .par_iter_mut()
+                            .enumerate()
+                            .for_each(|(i, slot)| {
+                                *slot = chunk_histograms
+                                    .iter()
+                                    .map(|h| h[i])
+                                    .fold(0u8, |a, b| a.saturating_add(b));
+                            });
+                        &par_counts[..num_slots]
+                    }
+                    #[cfg(not(feature = "parallel"))]
+                    {
+                        unreachable!()
+                    }
+                } else {
+                    seq_counts[..num_slots].fill(0);
+                    for &k in &remaining_keys {
+                        let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+                        seq_counts[bit_idx] = seq_counts[bit_idx].saturating_add(1);
+                    }
+                    &seq_counts[..num_slots]
+                };
+
+                let unique_count = if cfg!(feature = "parallel") && n >= PAR_THRESHOLD {
+                    #[cfg(feature = "parallel")]
+                    {
+                        counts_ref.par_iter().filter(|&&c| c == 1).count()
+                    }
+                    #[cfg(not(feature = "parallel"))]
+                    {
+                        unreachable!()
+                    }
+                } else {
+                    counts_ref.iter().filter(|&&c| c == 1).count()
+                };
 
                 // reject if the hash performed worse than the poisson expectation
                 if (unique_count as f64) < expected_unique {
@@ -125,23 +182,65 @@ impl LeveledMphf {
                     continue;
                 }
 
-                // otherwise good load, commit this level
+                // commit pass
+                // classify keys into placed (unique slot) vs survivors (collision)
+                // parallel path - thread-local vecs, then set bits sequentially and concat survivors.
                 let mut bs = BitSet::new(num_slots);
-                let mut next_keys = Vec::with_capacity(n - unique_count);
 
-                for &k in &remaining_keys {
-                    let hash = splitmix.hash(k, current_offset_multiplier as u64);
-                    let bit_idx = ((hash as u128 * num_slots as u128) >> 64) as usize;
+                let next_keys: Vec<u64> = if cfg!(feature = "parallel") && n >= PAR_THRESHOLD {
+                    #[cfg(feature = "parallel")]
+                    {
+                        let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
+                        let (placed_chunks, survivor_chunks): (Vec<Vec<usize>>, Vec<Vec<u64>>) =
+                            remaining_keys
+                                .par_chunks(chunk_size)
+                                .map(|chunk| {
+                                    let mut placed = Vec::new();
+                                    let mut survivors = Vec::new();
+                                    for &k in chunk {
+                                        let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+                                        if counts_ref[bit_idx] == 1 {
+                                            placed.push(bit_idx);
+                                        } else {
+                                            survivors.push(k);
+                                        }
+                                    }
+                                    (placed, survivors)
+                                })
+                                .unzip();
 
-                    if counts[bit_idx] == 1 {
-                        bs.set(bit_idx);
-                    } else {
-                        next_keys.push(k);
+                        // setting collected indices is O(unique_count).
+                        for placed in &placed_chunks {
+                            for &bit_idx in placed {
+                                bs.set(bit_idx);
+                            }
+                        }
+
+                        let mut out = Vec::with_capacity(n - unique_count);
+                        for chunk in survivor_chunks {
+                            out.extend(chunk);
+                        }
+                        out
                     }
-                }
+                    #[cfg(not(feature = "parallel"))]
+                    {
+                        unreachable!()
+                    }
+                } else {
+                    let mut next = Vec::with_capacity(n - unique_count);
+                    for &k in &remaining_keys {
+                        let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+                        if counts_ref[bit_idx] == 1 {
+                            bs.set(bit_idx);
+                        } else {
+                            next.push(k);
+                        }
+                    }
+                    next
+                };
 
                 level_meta.push(LevelMeta {
-                    offset_multiplier: current_offset_multiplier as u64,
+                    offset_multiplier: om,
                     num_slots,
                     cumulative_rank: items_placed_so_far,
                     keys_placed: unique_count,
@@ -207,6 +306,14 @@ mod tests {
         assert_bijection(&mphf, &keys);
     }
 
+    #[test]
+    fn parallel_path_correct() {
+        let keys: Vec<u64> = (0..10_000u64)
+            .map(|i| i.wrapping_mul(0xcafe_babe_dead_beef))
+            .collect();
+        let mphf = LeveledMphf::new(&keys, SEED, OFFSET, 1.5);
+        assert_bijection(&mphf, &keys);
+    }
 
     // cargo test -- --ignored
     #[test]
