@@ -44,12 +44,12 @@ fn main() {
         for &threshold in THRESHOLDS {
             // Warmup
             for _ in 0..WARMUP_RUNS {
-                let _ = LeveledMphf::new_with_par_threshold(&keys, SEED, OFFSET, EXPANSION, threshold);
+                let _ = LeveledMphf::new_with_par_threshold(&keys, SEED, OFFSET, Some(EXPANSION), threshold);
             }
 
             let start = Instant::now();
             for _ in 0..TIMED_RUNS {
-                let _ = LeveledMphf::new_with_par_threshold(&keys, SEED, OFFSET, EXPANSION, threshold);
+                let _ = LeveledMphf::new_with_par_threshold(&keys, SEED, OFFSET, Some(EXPANSION), threshold);
             }
             let elapsed = start.elapsed() / TIMED_RUNS;
             times.push(elapsed.as_secs_f64());

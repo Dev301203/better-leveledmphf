@@ -11,6 +11,9 @@ use crate::bitset::CACHE_LINE_BITS;
 // TODO: Test to find a good limit
 const PAR_THRESHOLD: usize = 4_096;
 
+/// Maximum γ when auto-tuning (2 * gamma_base); used for buffer sizing.
+const GAMMA_MAX: f64 = 3.0;
+
 struct LevelMeta {
     offset_multiplier: u64,
     num_slots: usize,
@@ -77,17 +80,22 @@ impl LeveledMphf {
     }
 
     pub fn new(keys: &[u64], seed: u64, offset: u64, expansion_factor: f64) -> Self {
-        Self::new_with_par_threshold(keys, seed, offset, expansion_factor, PAR_THRESHOLD)
+        Self::new_with_par_threshold(keys, seed, offset, Some(expansion_factor), PAR_THRESHOLD)
+    }
+
+    /// like [`new`](Self::new) but with adaptive γ per level: γ = 1.5 * (2 - n_remaining/n_original).
+    pub fn new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Self {
+        Self::new_with_par_threshold(keys, seed, offset, None, PAR_THRESHOLD)
     }
 
     /// same as [`new`](Self::new) but with a configurable parallelization threshold
-    /// levels with at least `par_threshold` keys use parallel work. smaller levels use serial
-    /// use `usize::MAX` to force serial construction
+    /// `expansion_factor`: `Some(g)` = fixed γ; `None` = adaptive γ per level
+    /// use `usize::MAX` for `par_threshold` to force serial construction
     pub fn new_with_par_threshold(
         keys: &[u64],
         seed: u64,
         offset: u64,
-        expansion_factor: f64,
+        expansion_factor: Option<f64>,
         par_threshold: usize,
     ) -> Self {
         let size = keys.len();
@@ -100,10 +108,12 @@ impl LeveledMphf {
         let mut current_offset_multiplier = 0u8;
         let mut items_placed_so_far = 0;
 
+        let gamma_base = expansion_factor.unwrap_or(1.5);
+        let buffer_gamma = expansion_factor.unwrap_or(GAMMA_MAX);
         // num_slots is strictly decreasing across levels, so allocate counts once at the maximum possible size
         // reuse it every iteration by zeroing only the [..num_slots] prefix
         let max_slots = {
-            let expanded = (size as f64 * expansion_factor).max(1.0) as usize;
+            let expanded = (size as f64 * buffer_gamma).max(1.0) as usize;
             ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
         };
         let mut seq_counts = vec![0u8; max_slots];
@@ -113,10 +123,16 @@ impl LeveledMphf {
 
         while !remaining_keys.is_empty() {
             let n = remaining_keys.len();
-
+            let gamma = match expansion_factor {
+                Some(g) => g,
+                None => {
+                    let ratio = n as f64 / size as f64;
+                    gamma_base * (2.0 - ratio)
+                }
+            };
             // oversize to a cache-line-aligned slot count
             // also eliminates the tail edge case for small remaining sets
-            let expanded = (n as f64 * expansion_factor).max(1.0) as usize;
+            let expanded = (n as f64 * gamma).max(1.0) as usize;
             let num_slots = ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS;
 
             // poisson-approximated expected unique count: E[unique] = n * e^(-load)
@@ -325,6 +341,15 @@ mod tests {
             .map(|i| i.wrapping_mul(0xcafe_babe_dead_beef))
             .collect();
         let mphf = LeveledMphf::new(&keys, SEED, OFFSET, 1.5);
+        assert_bijection(&mphf, &keys);
+    }
+
+    #[test]
+    fn auto_tuned_correct() {
+        let keys: Vec<u64> = (0..5_000u64)
+            .map(|i| i.wrapping_mul(0x1234_5678_9abc_def0))
+            .collect();
+        let mphf = LeveledMphf::new_auto_tuned(&keys, SEED, OFFSET);
         assert_bijection(&mphf, &keys);
     }
 
