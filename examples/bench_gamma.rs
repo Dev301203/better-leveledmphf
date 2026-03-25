@@ -10,12 +10,12 @@ use std::time::Instant;
 const SEED: u64 = 0xa0761d6478bd642f;
 const OFFSET: u64 = 0xe7037ed1a0b428db;
 
-/// Key counts to test.
+// Key counts to test.
 const KEY_COUNTS: &[usize] = &[
     1_000, 4_096, 8_192, 16_384, 32_768, 65_536, 131_072, 262_144,
 ];
 
-/// Fixed expansion factors to compare.
+// Fixed expansion factors to compare.
 const GAMMAS: &[f64] = &[1.3, 1.5, 1.7, 2.0];
 
 const WARMUP_RUNS: u32 = 1;
