@@ -1,3 +1,7 @@
+[workspace]
+members = [".", "benchmarks"]
+resolver = "2"
+
 [package]
 name = "better-mphf"
 version = "0.1.0"
