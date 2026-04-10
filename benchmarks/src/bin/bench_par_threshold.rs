@@ -1,6 +1,6 @@
 //! Benchmark different PAR_THRESHOLD values to find where parallelization pays off.
 //!
-//! Run with: cargo run --example bench_par_threshold --release --features parallel
+//! Run with: `cargo run -p mphf-benchmarks --bin bench_par_threshold --release`
 //!
 //! Without the `parallel` feature, every threshold behaves the same (serial only).
 

@@ -1,8 +1,9 @@
 //! Benchmark different expansion factor (γ) values and auto-tuned construction.
 //!
-//! Run with: cargo run --example bench_gamma --release
+//! Run with: `cargo run -p mphf-benchmarks --bin bench_gamma --release`
 //!
 //! Compares fixed γ (1.3, 1.5, 1.7, 2.0) vs auto-tuned (adaptive_gamma: γ = gamma_base * (2 - n_remaining/n_original)).
+
 
 use better_mphf::LeveledMphf;
 use std::time::Instant;
