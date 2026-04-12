@@ -1,7 +1,6 @@
 pub const CACHE_LINE_BYTES: usize = 64;
 pub const CACHE_LINE_BITS: usize = CACHE_LINE_BYTES * 8;
 
-
 #[repr(C, align(64))]
 #[derive(Clone, Default)]
 struct CacheLine {
@@ -189,8 +188,8 @@ mod tests {
         bs.set(7);
         bs.set(10);
         let rbs = RankedBitSet::new(bs);
-        assert_eq!(rbs.rank(3), 0);  // nothing before index 3
-        assert_eq!(rbs.rank(7), 1);  // {3}
+        assert_eq!(rbs.rank(3), 0); // nothing before index 3
+        assert_eq!(rbs.rank(7), 1); // {3}
         assert_eq!(rbs.rank(10), 2); // {3, 7}
         assert_eq!(rbs.rank(11), 3); // {3, 7, 10}
         assert_eq!(rbs.rank(99), 3); // still only three set bits
@@ -202,14 +201,14 @@ mod tests {
         let boundary = CACHE_LINE_BITS; // 512
         let mut bs = BitSet::new(boundary * 2);
         bs.set(boundary - 12); // in cache line 0
-        bs.set(boundary - 1);  // last bit of cache line 0
-        bs.set(boundary + 7);  // in cache line 1
+        bs.set(boundary - 1); // last bit of cache line 0
+        bs.set(boundary + 7); // in cache line 1
         let rbs = RankedBitSet::new(bs);
 
         assert_eq!(rbs.rank(boundary - 12), 0); // nothing before it
-        assert_eq!(rbs.rank(boundary - 1), 1);  // {boundary-12}
-        assert_eq!(rbs.rank(boundary), 2);       // {boundary-12, boundary-1}
-        assert_eq!(rbs.rank(boundary + 7), 2);  // same two; boundary+7 not yet counted
-        assert_eq!(rbs.rank(boundary + 8), 3);  // now includes boundary+7
+        assert_eq!(rbs.rank(boundary - 1), 1); // {boundary-12}
+        assert_eq!(rbs.rank(boundary), 2); // {boundary-12, boundary-1}
+        assert_eq!(rbs.rank(boundary + 7), 2); // same two; boundary+7 not yet counted
+        assert_eq!(rbs.rank(boundary + 8), 3); // now includes boundary+7
     }
 }

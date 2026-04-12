@@ -5,13 +5,13 @@ use rayon::prelude::*;
 #[cfg(feature = "parallel")]
 use std::cell::RefCell;
 
-use crate::hash::SplitMix64;
-use crate::bitset::{RankedBitSet, BitSet};
 use crate::bitset::CACHE_LINE_BITS;
+use crate::bitset::{BitSet, RankedBitSet};
+use crate::hash::SplitMix64;
 
 // Minimum number of keys before we spawn parallel work; below this, overhead dominates.
 // TODO: Test to find a good limit
-const PAR_THRESHOLD: usize = 4_096;
+const PAR_THRESHOLD: usize = 131_072;
 
 // Maximum γ when auto-tuning (2 * gamma_base); used for buffer sizing.
 const GAMMA_MAX: f64 = 3.0;
@@ -41,16 +41,15 @@ fn fastrange(hash: u64, n: usize) -> usize {
     ((hash as u128 * n as u128) >> 64) as usize
 }
 
-// one level attempt
-// sequential counting, unique count, commit
-// returns (unique_count, next_keys, bs)
-fn run_level_sequential(
+// one level attempt - count half (classify is seq_classify_pass after Poisson acceptance)
+// sequential counting, unique count
+fn seq_count_pass(
     seq_counts: &mut [u8],
     remaining_keys: &[u64],
     num_slots: usize,
     om: u64,
     splitmix: &SplitMix64,
-) -> (usize, Vec<u64>, BitSet) {
+) -> usize {
     // counting pass
     // sequential path uses seq_counts
     seq_counts.fill(0);
@@ -58,11 +57,21 @@ fn run_level_sequential(
         let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
         seq_counts[bit_idx] = seq_counts[bit_idx].saturating_add(1);
     }
-    let unique_count = seq_counts.iter().filter(|&&c| c == 1).count();
+    seq_counts.iter().filter(|&&c| c == 1).count()
+}
 
-    // commit pass
-    // classify keys into placed (unique slot) vs survivors (collision)
-    // set bits and build next_keys
+// one level attempt - classify half (only after count passes Poisson gate)
+// commit pass
+// classify keys into placed (unique slot) vs survivors (collision)
+// set bits and build next_keys
+fn seq_classify_pass(
+    seq_counts: &[u8],
+    remaining_keys: &[u64],
+    num_slots: usize,
+    unique_count: usize,
+    om: u64,
+    splitmix: &SplitMix64,
+) -> (Vec<u64>, BitSet) {
     let mut bs = BitSet::new(num_slots);
     let mut next_keys = Vec::with_capacity(remaining_keys.len() - unique_count);
     for &k in remaining_keys {
@@ -73,7 +82,7 @@ fn run_level_sequential(
             next_keys.push(k);
         }
     }
-    (unique_count, next_keys, bs)
+    (next_keys, bs)
 }
 
 #[cfg(feature = "parallel")]
@@ -83,16 +92,15 @@ thread_local! {
 }
 
 #[cfg(feature = "parallel")]
-// one level attempt
-// parallel counting (thread-local buffer, clone out for reduce), parallel unique count, parallel commit
-// returns (unique_count, next_keys, bs)
-fn run_level_parallel(
+// one level attempt - count half (classify is par_classify_pass after Poisson acceptance)
+// parallel counting (thread-local buffer, clone out for reduce), parallel unique count
+fn par_count_pass(
     remaining_keys: &[u64],
     n: usize,
     num_slots: usize,
     om: u64,
     splitmix: &SplitMix64,
-) -> (usize, Vec<u64>, BitSet) {
+) -> (usize, Vec<u8>) {
     // counting pass
     // each worker fills its thread-local buffer, clones out for tree reduce.
     let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
@@ -120,10 +128,23 @@ fn run_level_parallel(
             },
         );
     let unique_count = counts.par_iter().filter(|&&c| c == 1).count();
+    (unique_count, counts)
+}
 
-    // commit pass
-    // classify keys into placed (unique slot) vs survivors (collision)
-    // thread-local vecs, then set bits sequentially and concat survivors.
+#[cfg(feature = "parallel")]
+// one level attempt - classify half (only after count passes Poisson gate)
+// parallel commit pass
+// classify keys into placed (unique slot) vs survivors (collision)
+// thread-local vecs, then set bits sequentially and concat survivors.
+fn par_classify_pass(
+    remaining_keys: &[u64],
+    n: usize,
+    num_slots: usize,
+    unique_count: usize,
+    om: u64,
+    splitmix: &SplitMix64,
+    counts: &[u8],
+) -> (Vec<u64>, BitSet) {
     let mut bs = BitSet::new(num_slots);
     let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
     let (placed_chunks, survivor_chunks): (Vec<Vec<usize>>, Vec<Vec<u64>>) = remaining_keys
@@ -153,7 +174,7 @@ fn run_level_parallel(
     for chunk in survivor_chunks {
         next_keys.extend(chunk);
     }
-    (unique_count, next_keys, bs)
+    (next_keys, bs)
 }
 
 impl LeveledMphf {
@@ -257,33 +278,85 @@ impl LeveledMphf {
 
             loop {
                 if current_offset_multiplier == 255 {
-                    panic!("Exhausted all 255 offset multipliers after {} attempts! Try a different base seed.", num_attempts);
+                    panic!(
+                        "Exhausted all 255 offset multipliers after {} attempts! Try a different base seed.",
+                        num_attempts
+                    );
                 }
 
                 let om = current_offset_multiplier as u64;
 
+                // count pass first
+                // classify only after Poisson acceptance (rejected attempts skip BitSet + next_keys)
                 #[cfg(feature = "parallel")]
                 let (unique_count, next_keys, bs) = if n >= par_threshold {
-                    run_level_parallel(&remaining_keys, n, num_slots, om, &splitmix)
+                    let (unique_count, counts) =
+                        par_count_pass(&remaining_keys, n, num_slots, om, &splitmix);
+                    // reject if the hash performed worse than the poisson expectation
+                    if (unique_count as f64) < expected_unique {
+                        num_attempts += 1;
+                        current_offset_multiplier += 1;
+                        continue;
+                    }
+                    let (next_keys, bs) = par_classify_pass(
+                        &remaining_keys,
+                        n,
+                        num_slots,
+                        unique_count,
+                        om,
+                        &splitmix,
+                        &counts,
+                    );
+                    (unique_count, next_keys, bs)
                 } else {
-                    run_level_sequential(
+                    let unique_count = seq_count_pass(
                         &mut seq_counts[..num_slots],
                         &remaining_keys,
                         num_slots,
                         om,
                         &splitmix,
-                    )
+                    );
+                    // reject if the hash performed worse than the poisson expectation
+                    if (unique_count as f64) < expected_unique {
+                        num_attempts += 1;
+                        current_offset_multiplier += 1;
+                        continue;
+                    }
+                    let (next_keys, bs) = seq_classify_pass(
+                        &seq_counts[..num_slots],
+                        &remaining_keys,
+                        num_slots,
+                        unique_count,
+                        om,
+                        &splitmix,
+                    );
+                    (unique_count, next_keys, bs)
                 };
                 #[cfg(not(feature = "parallel"))]
-                let (unique_count, next_keys, bs) =
-                    run_level_sequential(&mut seq_counts[..num_slots], &remaining_keys, num_slots, om, &splitmix);
-
-                // reject if the hash performed worse than the poisson expectation
-                if (unique_count as f64) < expected_unique {
-                    num_attempts += 1;
-                    current_offset_multiplier += 1;
-                    continue;
-                }
+                let (unique_count, next_keys, bs) = {
+                    let unique_count = seq_count_pass(
+                        &mut seq_counts[..num_slots],
+                        &remaining_keys,
+                        num_slots,
+                        om,
+                        &splitmix,
+                    );
+                    // reject if the hash performed worse than the poisson expectation
+                    if (unique_count as f64) < expected_unique {
+                        num_attempts += 1;
+                        current_offset_multiplier += 1;
+                        continue;
+                    }
+                    let (next_keys, bs) = seq_classify_pass(
+                        &seq_counts[..num_slots],
+                        &remaining_keys,
+                        num_slots,
+                        unique_count,
+                        om,
+                        &splitmix,
+                    );
+                    (unique_count, next_keys, bs)
+                };
 
                 level_meta.push(LevelMeta {
                     offset_multiplier: om,
@@ -319,10 +392,13 @@ mod tests {
         let mut outputs: Vec<usize> = keys.iter().map(|&k| mphf.lookup(k)).collect();
         outputs.sort_unstable();
         let expected: Vec<usize> = (0..n).collect();
-        assert_eq!(outputs, expected, "lookup results are not a bijection onto [0, {n})");
+        assert_eq!(
+            outputs, expected,
+            "lookup results are not a bijection onto [0, {n})"
+        );
     }
 
-    const SEED: u64   = 0xa0761d6478bd642f;
+    const SEED: u64 = 0xa0761d6478bd642f;
     const OFFSET: u64 = 0xe7037ed1a0b428db;
 
     #[test]

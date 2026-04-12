@@ -1,12 +1,12 @@
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct SplitMix64 {
-    seed : u64,
-    offset: u64
+    seed: u64,
+    offset: u64,
 }
 
 impl SplitMix64 {
     pub(crate) fn new(seed: u64, offset: u64) -> Self {
-        SplitMix64{seed, offset}
+        SplitMix64 { seed, offset }
     }
 
     pub(crate) fn hash(&self, key: u64, num_offsets: u64) -> u64 {
