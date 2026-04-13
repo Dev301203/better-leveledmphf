@@ -36,20 +36,6 @@ impl BitSet {
         let mask = 1u64 << bit_idx;
         self.data[cache_line_idx].line[u64_idx] |= mask;
     }
-
-    #[inline(always)]
-    pub fn get(&self, idx: usize) -> bool {
-        debug_assert!(
-            idx < self.size,
-            "index {idx} out of bounds for BitSet of size {}",
-            self.size
-        );
-        let cache_line_idx = idx >> 9;
-        let u64_idx = (idx & 511) >> 6;
-        let bit_idx = idx & 63;
-        let mask = 1u64 << bit_idx;
-        self.data[cache_line_idx].line[u64_idx] & mask != 0
-    }
 }
 
 pub(crate) struct RankedBitSet {
@@ -78,11 +64,6 @@ impl RankedBitSet {
         RankedBitSet { bs, rank_prefix }
     }
 
-    #[inline(always)]
-    pub(crate) fn get(&self, idx: usize) -> bool {
-        self.bs.get(idx)
-    }
-
     // returns Some(rank) if the bit at idx is set, None otherwise
     // Fuses the get + rank into a single index decomposition and word load.
     #[inline(always)]
@@ -109,9 +90,29 @@ impl RankedBitSet {
         count += (word & partial_mask).count_ones() as usize;
         Some(count)
     }
+}
 
+#[cfg(test)]
+impl BitSet {
     #[inline(always)]
-    pub(crate) fn rank(&self, idx: usize) -> usize {
+    fn get(&self, idx: usize) -> bool {
+        debug_assert!(
+            idx < self.size,
+            "index {idx} out of bounds for BitSet of size {}",
+            self.size
+        );
+        let cache_line_idx = idx >> 9;
+        let u64_idx = (idx & 511) >> 6;
+        let bit_idx = idx & 63;
+        let mask = 1u64 << bit_idx;
+        self.data[cache_line_idx].line[u64_idx] & mask != 0
+    }
+}
+
+#[cfg(test)]
+impl RankedBitSet {
+    #[inline(always)]
+    fn rank(&self, idx: usize) -> usize {
         debug_assert!(
             idx < self.bs.size,
             "index {idx} out of bounds for RankedBitSet of size {}",
