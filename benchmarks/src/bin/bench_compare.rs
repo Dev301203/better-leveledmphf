@@ -3,7 +3,7 @@
 //! Construction: **median ms** over repeated timed runs; bracket shows **min–max** spread.
 //! Use on a quiet / dedicated node (e.g. Slurm exclusive) for conclusive numbers.
 //!
-//! Parallel construction lives in **`bench_compare_parallel`**.
+//! Parallel construction lives in **`bench_compare_parallel`** (`--features parallel`).
 //!
 //! Build C++ (from repo root):  
 //! `g++ -O3 -pthread -std=c++14 -o benchmarks/cpp/bbhash_bench benchmarks/cpp/bbhash_bench.cpp`

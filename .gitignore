@@ -1,3 +1,4 @@
 /target
+bench-results/
 benchmarks/cpp/bbhash_bench
 benchmarks/cpp/bbhash_bench.exe

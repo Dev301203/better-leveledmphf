@@ -1,18 +1,18 @@
 [package]
 name = "mphf-benchmarks"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [features]
 default = []
-# Enables Rayon construction in `better-mphf` (and is required to build `bench_compare_parallel`).
-parallel = ["better-mphf/parallel"]
+parallel = ["better-mphf/parallel", "boomphf/parallel", "dep:rayon"]
 
 [dependencies]
 better-mphf = { path = ".." }
-boomphf = { version = "0.6", features = ["parallel"] }
-rayon = "1.10"
+boomphf = { version = "0.6", default-features = false }
+rayon = { version = "=1.9.0", optional = true }
 
 [[bin]]
 name = "bench_compare_parallel"
+path = "src/bin/bench_compare_parallel.rs"
 required-features = ["parallel"]

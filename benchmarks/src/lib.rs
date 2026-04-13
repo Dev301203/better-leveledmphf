@@ -2,6 +2,7 @@
 
 use better_mphf::LeveledMphf;
 use boomphf::Mphf;
+#[cfg(feature = "parallel")]
 use rayon::ThreadPool;
 use std::hint::black_box;
 use std::path::{Path, PathBuf};
@@ -138,6 +139,7 @@ pub fn time_better_serial_mmm(
     })
 }
 
+#[cfg(feature = "parallel")]
 pub fn time_better_parallel_mmm(
     pool: &ThreadPool,
     keys: &[u64],
@@ -162,6 +164,7 @@ pub fn time_boom_serial_mmm(keys: &[u64], gamma: f64, warmup: u32, timed: u32) -
     })
 }
 
+#[cfg(feature = "parallel")]
 pub fn time_boom_parallel_mmm(
     pool: &ThreadPool,
     keys: &[u64],
@@ -189,6 +192,7 @@ pub fn lookup_better_serial_ms(keys: &[u64], gamma: f64) -> f64 {
     t0.elapsed().as_secs_f64() * 1000.0 / LOOKUP_TIMED as f64
 }
 
+#[cfg(feature = "parallel")]
 pub fn lookup_better_parallel_ms(pool: &ThreadPool, keys: &[u64], gamma: f64) -> f64 {
     let mphf = pool.install(|| LeveledMphf::new(keys, SEED, OFFSET, gamma));
     let t0 = Instant::now();
@@ -211,6 +215,7 @@ pub fn lookup_boom_ms(keys: &[u64], gamma: f64) -> f64 {
     t0.elapsed().as_secs_f64() * 1000.0 / LOOKUP_TIMED as f64
 }
 
+#[cfg(feature = "parallel")]
 pub fn lookup_boom_parallel_ms(pool: &ThreadPool, keys: &[u64], gamma: f64) -> f64 {
     let mphf = pool.install(|| Mphf::new_parallel(gamma, keys, None));
     let t0 = Instant::now();
