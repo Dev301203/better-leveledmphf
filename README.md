@@ -1,6 +1,6 @@
 # Better Leveled MPHF
 
-Leveled minimal perfect hash function in Rust. Hashes `n` keys to `[0, n)` with no collisions
+Leveled minimal perfect hash function in Rust. Hashes `n` keys to `[0, n)` with no collisions.
 
 Keys are hashed into a bitset level by level. Keys that land in a unique slot are placed there, while the rest cascade to the next level. Lookup checks each level until it finds the key's slot and returns the cumulative rank.
 
@@ -12,6 +12,9 @@ Keys are hashed into a bitset level by level. Keys that land in a unique slot ar
 - Level 0 peeled out since cumulative rank is always 0
 - Poisson acceptance, construction rejects a hash function if unique-landing count falls below `n·e^(−load)`
 - SplitMix64 hash, giga fast and random enough
+- `new*` is the fast path and assumes the input is a non-empty set of unique `u64` keys
+- `try_new*` validates empty or duplicate input and returns a `BuildError`
+- Lookup is only defined for keys in the original set; a missing key causes a panic
 
 ## Usage
 
