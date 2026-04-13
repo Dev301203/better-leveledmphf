@@ -9,7 +9,7 @@ edition = "2024"
 rust-version = "1.85"
 
 [features]
-default = ["parallel"]
+default = []
 parallel = ["dep:rayon"]
 
 [dependencies]

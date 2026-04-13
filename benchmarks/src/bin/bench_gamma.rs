@@ -4,8 +4,8 @@
 //!
 //! Compares fixed γ (1.3, 1.5, 1.7, 2.0) vs auto-tuned (adaptive_gamma: γ = gamma_base * (2 - n_remaining/n_original)).
 
-
 use better_mphf::LeveledMphf;
+use std::hint::black_box;
 use std::time::Instant;
 
 const SEED: u64 = 0xa0761d6478bd642f;
@@ -21,9 +21,14 @@ const GAMMAS: &[f64] = &[1.3, 1.5, 1.7, 2.0];
 
 const WARMUP_RUNS: u32 = 1;
 const TIMED_RUNS: u32 = 5;
+const LOOKUP_TIMED: u32 = 5;
 
 fn main() {
     println!("Expansion factor (γ) benchmark\n");
+    println!(
+        "--- Construction (ms), mean over {} timed runs ---\n",
+        TIMED_RUNS
+    );
     println!(
         "{:>9} | {:>8} | {:>8} | {:>8} | {:>8} | {:>10} | Best",
         "Keys", "γ=1.3", "γ=1.5", "γ=1.7", "γ=2.0", "auto-tuned"
@@ -83,5 +88,62 @@ fn main() {
         );
     }
 
-    println!("\nLower γ = smaller tables but more retries; auto-tuned uses adaptive_gamma so γ grows as keys drain.");
+    println!(
+        "\n--- Lookup: full scan of all keys (ms), mean over {} runs; one MPHF build per cell (not timed) ---\n",
+        LOOKUP_TIMED
+    );
+    println!(
+        "{:>9} | {:>8} | {:>8} | {:>8} | {:>8} | {:>10} | Best",
+        "Keys", "γ=1.3", "γ=1.5", "γ=1.7", "γ=2.0", "auto-tuned"
+    );
+    println!("{}", "-".repeat(75));
+
+    for &n in KEY_COUNTS {
+        let keys: Vec<u64> = (0..n as u64)
+            .map(|i| i.wrapping_mul(0x9e37_79b9_7f4a_7c15))
+            .collect();
+
+        let mut lk = Vec::with_capacity(GAMMAS.len() + 1);
+        for &gamma in GAMMAS {
+            let mphf = LeveledMphf::new(&keys, SEED, OFFSET, gamma);
+            let start = Instant::now();
+            for _ in 0..LOOKUP_TIMED {
+                for &k in &keys {
+                    black_box(mphf.lookup(k));
+                }
+            }
+            lk.push((start.elapsed() / LOOKUP_TIMED).as_secs_f64() * 1000.0);
+        }
+        {
+            let mphf = LeveledMphf::new_auto_tuned(&keys, SEED, OFFSET);
+            let start = Instant::now();
+            for _ in 0..LOOKUP_TIMED {
+                for &k in &keys {
+                    black_box(mphf.lookup(k));
+                }
+            }
+            lk.push((start.elapsed() / LOOKUP_TIMED).as_secs_f64() * 1000.0);
+        }
+
+        let best_lk = lk
+            .iter()
+            .enumerate()
+            .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+            .map(|(i, _)| i)
+            .unwrap();
+        let best_lk_label = if best_lk < GAMMAS.len() {
+            format!("γ={}", GAMMAS[best_lk])
+        } else {
+            "auto-tuned".to_string()
+        };
+
+        println!(
+            "{:>9} | {:>6.2}ms | {:>6.2}ms | {:>6.2}ms | {:>6.2}ms | {:>8.2}ms | {}",
+            n, lk[0], lk[1], lk[2], lk[3], lk[4], best_lk_label,
+        );
+    }
+
+    println!(
+        "\nLower γ = smaller tables but more retries; auto-tuned uses adaptive_gamma so γ grows as keys drain."
+    );
 }
