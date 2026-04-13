@@ -1,4 +1,5 @@
 use core::panic;
+use std::collections::HashSet;
 
 #[cfg(feature = "parallel")]
 use rayon::prelude::*;
@@ -28,6 +29,12 @@ pub struct LevelStats {
     pub num_slots: usize,
     pub keys_placed: usize,
     pub fill_factor: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BuildError {
+    EmptyKeys,
+    DuplicateKey { key: u64 },
 }
 
 pub struct LeveledMphf {
@@ -183,6 +190,161 @@ fn par_classify_pass(
 }
 
 impl LeveledMphf {
+    fn validate_keys(keys: &[u64]) -> Result<(), BuildError> {
+        if keys.is_empty() {
+            return Err(BuildError::EmptyKeys);
+        }
+
+        let mut seen = HashSet::with_capacity(keys.len());
+        for &key in keys {
+            if !seen.insert(key) {
+                return Err(BuildError::DuplicateKey { key });
+            }
+        }
+
+        Ok(())
+    }
+
+    fn build_unchecked(
+        keys: &[u64],
+        seed: u64,
+        offset: u64,
+        expansion_factor: Option<f64>,
+        par_threshold: usize,
+    ) -> Self {
+        #[cfg(not(feature = "parallel"))]
+        let _ = par_threshold;
+
+        assert!(
+            !keys.is_empty(),
+            "LeveledMphf constructors require at least one key"
+        );
+
+        let size = keys.len();
+        let splitmix = SplitMix64::new(seed, offset);
+
+        let mut level_meta = Vec::new();
+        let mut bitsets = Vec::new();
+
+        let mut remaining_keys = keys.to_vec();
+        let mut current_offset_multiplier = 0u64;
+        let mut items_placed_so_far = 0;
+
+        let gamma_base = expansion_factor.unwrap_or(1.5);
+        let buffer_gamma = expansion_factor.unwrap_or(GAMMA_MAX);
+        // num_slots is strictly decreasing across levels, so allocate counts once at the maximum possible size
+        // reuse it every iteration by zeroing only the [..num_slots] prefix
+        let max_slots = {
+            let expanded = (size as f64 * buffer_gamma).max(1.0) as usize;
+            ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
+        };
+        let mut seq_counts = vec![0u8; max_slots];
+
+        while !remaining_keys.is_empty() {
+            let n = remaining_keys.len();
+            let gamma = match expansion_factor {
+                Some(g) => g,
+                None => {
+                    let ratio = n as f64 / size as f64;
+                    gamma_base * (2.0 - ratio)
+                }
+            };
+            // oversize to a cache-line-aligned slot count
+            // also eliminates the tail edge case for small remaining sets
+            let expanded = (n as f64 * gamma).max(1.0) as usize;
+            let num_slots = ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS;
+
+            // poisson-approximated expected unique count: E[unique] = n * e^(-load)
+            let load = n as f64 / num_slots as f64;
+            let expected_unique = n as f64 * (-load).exp();
+
+            loop {
+                let om = current_offset_multiplier;
+
+                // count pass first
+                // classify only after Poisson acceptance (rejected attempts skip BitSet + next_keys)
+                #[cfg(feature = "parallel")]
+                // only large remaining_key sets pay Rayon overhead
+                let do_parallel = n >= par_threshold;
+                #[cfg(not(feature = "parallel"))]
+                // no Rayon in dependency graph
+                let do_parallel = false;
+
+                let (unique_count, next_keys, bs) = if do_parallel {
+                    #[cfg(feature = "parallel")]
+                    {
+                        let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
+                        let (unique_count, counts) =
+                            par_count_pass(&remaining_keys, chunk_size, num_slots, om, &splitmix);
+                        // reject if the hash performed worse than the poisson expectation
+                        if (unique_count as f64) < expected_unique {
+                            current_offset_multiplier += 1;
+                            continue;
+                        }
+                        let (next_keys, bs) = par_classify_pass(
+                            &remaining_keys,
+                            chunk_size,
+                            n,
+                            num_slots,
+                            unique_count,
+                            om,
+                            &splitmix,
+                            &counts,
+                        );
+                        (unique_count, next_keys, bs)
+                    }
+                    #[cfg(not(feature = "parallel"))]
+                    {
+                        unreachable!("parallel path only when the parallel feature is enabled")
+                    }
+                } else {
+                    // sequential count + classify
+                    let unique_count = seq_count_pass(
+                        &mut seq_counts[..num_slots],
+                        &remaining_keys,
+                        num_slots,
+                        om,
+                        &splitmix,
+                    );
+                    // reject if the hash performed worse than the poisson expectation
+                    if (unique_count as f64) < expected_unique {
+                        current_offset_multiplier += 1;
+                        continue;
+                    }
+                    let bs = seq_classify_pass_inplace(
+                        &seq_counts[..num_slots],
+                        &mut remaining_keys,
+                        num_slots,
+                        unique_count,
+                        om,
+                        &splitmix,
+                    );
+                    (unique_count, remaining_keys, bs)
+                };
+
+                level_meta.push(LevelMeta {
+                    offset_multiplier: om,
+                    num_slots,
+                    cumulative_rank: items_placed_so_far,
+                    keys_placed: unique_count,
+                });
+                bitsets.push(RankedBitSet::new(bs));
+
+                items_placed_so_far += unique_count;
+                remaining_keys = next_keys;
+                current_offset_multiplier += 1;
+
+                break;
+            }
+        }
+
+        Self {
+            splitmix,
+            level_meta,
+            bitsets,
+        }
+    }
+
     #[inline(always)]
     pub fn lookup(&self, key: u64) -> usize {
         debug_assert!(!self.level_meta.is_empty(), "lookup called on empty MPHF");
@@ -223,12 +385,25 @@ impl LeveledMphf {
     }
 
     pub fn new(keys: &[u64], seed: u64, offset: u64, expansion_factor: f64) -> Self {
-        Self::new_with_par_threshold(keys, seed, offset, Some(expansion_factor), PAR_THRESHOLD)
+        Self::build_unchecked(keys, seed, offset, Some(expansion_factor), PAR_THRESHOLD)
     }
 
     // like [`new`](Self::new) but with adaptive γ per level: γ = 1.5 * (2 - n_remaining/n_original).
     pub fn new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Self {
-        Self::new_with_par_threshold(keys, seed, offset, None, PAR_THRESHOLD)
+        Self::build_unchecked(keys, seed, offset, None, PAR_THRESHOLD)
+    }
+
+    pub fn try_new(
+        keys: &[u64],
+        seed: u64,
+        offset: u64,
+        expansion_factor: f64,
+    ) -> Result<Self, BuildError> {
+        Self::try_new_with_par_threshold(keys, seed, offset, Some(expansion_factor), PAR_THRESHOLD)
+    }
+
+    pub fn try_new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Result<Self, BuildError> {
+        Self::try_new_with_par_threshold(keys, seed, offset, None, PAR_THRESHOLD)
     }
 
     // same as [`new`](Self::new) but with a configurable parallelization threshold
@@ -241,143 +416,24 @@ impl LeveledMphf {
         expansion_factor: Option<f64>,
         par_threshold: usize,
     ) -> Self {
-        #[cfg(not(feature = "parallel"))]
-        let _ = par_threshold;
+        Self::build_unchecked(keys, seed, offset, expansion_factor, par_threshold)
+    }
 
-        let size = keys.len();
-        let splitmix = SplitMix64::new(seed, offset);
-
-        let mut level_meta = Vec::new();
-        let mut bitsets = Vec::new();
-
-        let mut remaining_keys = keys.to_vec();
-        let mut current_offset_multiplier = 0u8;
-        let mut items_placed_so_far = 0;
-
-        let gamma_base = expansion_factor.unwrap_or(1.5);
-        let buffer_gamma = expansion_factor.unwrap_or(GAMMA_MAX);
-        // num_slots is strictly decreasing across levels, so allocate counts once at the maximum possible size
-        // reuse it every iteration by zeroing only the [..num_slots] prefix
-        let max_slots = {
-            let expanded = (size as f64 * buffer_gamma).max(1.0) as usize;
-            ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
-        };
-        let mut seq_counts = vec![0u8; max_slots];
-
-        while !remaining_keys.is_empty() {
-            let n = remaining_keys.len();
-            let gamma = match expansion_factor {
-                Some(g) => g,
-                None => {
-                    let ratio = n as f64 / size as f64;
-                    gamma_base * (2.0 - ratio)
-                }
-            };
-            // oversize to a cache-line-aligned slot count
-            // also eliminates the tail edge case for small remaining sets
-            let expanded = (n as f64 * gamma).max(1.0) as usize;
-            let num_slots = ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS;
-
-            // poisson-approximated expected unique count: E[unique] = n * e^(-load)
-            let load = n as f64 / num_slots as f64;
-            let expected_unique = n as f64 * (-load).exp();
-
-            let mut num_attempts = 1usize;
-
-            loop {
-                if current_offset_multiplier == 255 {
-                    panic!(
-                        "Exhausted all 255 offset multipliers after {} attempts! Try a different base seed.",
-                        num_attempts
-                    );
-                }
-
-                let om = current_offset_multiplier as u64;
-
-                // count pass first
-                // classify only after Poisson acceptance (rejected attempts skip BitSet + next_keys)
-                #[cfg(feature = "parallel")]
-                // only large remaining_key sets pay Rayon overhead
-                let do_parallel = n >= par_threshold;
-                #[cfg(not(feature = "parallel"))]
-                // no Rayon in dependency graph
-                let do_parallel = false;
-
-                let (unique_count, next_keys, bs) = if do_parallel {
-                    #[cfg(feature = "parallel")]
-                    {
-                        let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
-                        let (unique_count, counts) =
-                            par_count_pass(&remaining_keys, chunk_size, num_slots, om, &splitmix);
-                        // reject if the hash performed worse than the poisson expectation
-                        if (unique_count as f64) < expected_unique {
-                            num_attempts += 1;
-                            current_offset_multiplier += 1;
-                            continue;
-                        }
-                        let (next_keys, bs) = par_classify_pass(
-                            &remaining_keys,
-                            chunk_size,
-                            n,
-                            num_slots,
-                            unique_count,
-                            om,
-                            &splitmix,
-                            &counts,
-                        );
-                        (unique_count, next_keys, bs)
-                    }
-                    #[cfg(not(feature = "parallel"))]
-                    {
-                        unreachable!("parallel path only when the parallel feature is enabled")
-                    }
-                } else {
-                    // sequential count + classify
-                    let unique_count = seq_count_pass(
-                        &mut seq_counts[..num_slots],
-                        &remaining_keys,
-                        num_slots,
-                        om,
-                        &splitmix,
-                    );
-                    // reject if the hash performed worse than the poisson expectation
-                    if (unique_count as f64) < expected_unique {
-                        num_attempts += 1;
-                        current_offset_multiplier += 1;
-                        continue;
-                    }
-                    let bs = seq_classify_pass_inplace(
-                        &seq_counts[..num_slots],
-                        &mut remaining_keys,
-                        num_slots,
-                        unique_count,
-                        om,
-                        &splitmix,
-                    );
-                    (unique_count, remaining_keys, bs)
-                };
-
-                level_meta.push(LevelMeta {
-                    offset_multiplier: om,
-                    num_slots,
-                    cumulative_rank: items_placed_so_far,
-                    keys_placed: unique_count,
-                });
-                bitsets.push(RankedBitSet::new(bs));
-
-                items_placed_so_far += unique_count;
-                remaining_keys = next_keys;
-                current_offset_multiplier += 1;
-
-                break;
-            }
-        }
-
-        Self {
-            splitmix,
-            level_meta,
-            bitsets,
-        }
+    pub fn try_new_with_par_threshold(
+        keys: &[u64],
+        seed: u64,
+        offset: u64,
+        expansion_factor: Option<f64>,
+        par_threshold: usize,
+    ) -> Result<Self, BuildError> {
+        Self::validate_keys(keys)?;
+        Ok(Self::build_unchecked(
+            keys,
+            seed,
+            offset,
+            expansion_factor,
+            par_threshold,
+        ))
     }
 }
 
@@ -404,6 +460,22 @@ mod tests {
     fn single_key() {
         let mphf = LeveledMphf::new(&[42], SEED, OFFSET, 1.5);
         assert_eq!(mphf.lookup(42), 0);
+    }
+
+    #[test]
+    fn empty_keys_rejected() {
+        let err = LeveledMphf::try_new(&[], SEED, OFFSET, 1.5)
+            .err()
+            .expect("empty input should be rejected");
+        assert_eq!(err, BuildError::EmptyKeys);
+    }
+
+    #[test]
+    fn duplicate_keys_rejected() {
+        let err = LeveledMphf::try_new(&[1, 2, 2, 3], SEED, OFFSET, 1.5)
+            .err()
+            .expect("duplicate input should be rejected");
+        assert_eq!(err, BuildError::DuplicateKey { key: 2 });
     }
 
     #[test]
