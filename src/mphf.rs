@@ -62,27 +62,33 @@ fn seq_count_pass(
 
 // one level attempt - classify half (only after count passes Poisson gate)
 // commit pass
-// classify keys into placed (unique slot) vs survivors (collision)
-// set bits and build next_keys
-fn seq_classify_pass(
+// partition `remaining_keys` in place (write head + truncate to survivor count)
+// singleton slot keys only set bits
+// collision keys are gathered toward lower indices as we scan, then the vec length is set to the survivor count
+fn seq_classify_pass_inplace(
     seq_counts: &[u8],
-    remaining_keys: &[u64],
+    remaining_keys: &mut Vec<u64>,
     num_slots: usize,
     unique_count: usize,
     om: u64,
     splitmix: &SplitMix64,
-) -> (Vec<u64>, BitSet) {
+) -> BitSet {
     let mut bs = BitSet::new(num_slots);
-    let mut next_keys = Vec::with_capacity(remaining_keys.len() - unique_count);
-    for &k in remaining_keys {
+    let n = remaining_keys.len();
+    let mut w = 0usize;
+    for i in 0..n {
+        let k = remaining_keys[i];
         let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
         if seq_counts[bit_idx] == 1 {
             bs.set(bit_idx);
         } else {
-            next_keys.push(k);
+            remaining_keys[w] = k;
+            w += 1;
         }
     }
-    (next_keys, bs)
+    debug_assert_eq!(w, n - unique_count);
+    remaining_keys.truncate(w);
+    bs
 }
 
 #[cfg(feature = "parallel")]
@@ -96,14 +102,13 @@ thread_local! {
 // parallel counting (thread-local buffer, clone out for reduce), parallel unique count
 fn par_count_pass(
     remaining_keys: &[u64],
-    n: usize,
+    chunk_size: usize,
     num_slots: usize,
     om: u64,
     splitmix: &SplitMix64,
 ) -> (usize, Vec<u8>) {
     // counting pass
     // each worker fills its thread-local buffer, clones out for tree reduce.
-    let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
     let counts = remaining_keys
         .par_chunks(chunk_size)
         .map(|chunk| {
@@ -138,6 +143,7 @@ fn par_count_pass(
 // thread-local vecs, then set bits sequentially and concat survivors.
 fn par_classify_pass(
     remaining_keys: &[u64],
+    chunk_size: usize,
     n: usize,
     num_slots: usize,
     unique_count: usize,
@@ -146,7 +152,6 @@ fn par_classify_pass(
     counts: &[u8],
 ) -> (Vec<u64>, BitSet) {
     let mut bs = BitSet::new(num_slots);
-    let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
     let (placed_chunks, survivor_chunks): (Vec<Vec<usize>>, Vec<Vec<u64>>) = remaining_keys
         .par_chunks(chunk_size)
         .map(|chunk| {
@@ -236,6 +241,9 @@ impl LeveledMphf {
         expansion_factor: Option<f64>,
         par_threshold: usize,
     ) -> Self {
+        #[cfg(not(feature = "parallel"))]
+        let _ = par_threshold;
+
         let size = keys.len();
         let splitmix = SplitMix64::new(seed, offset);
 
@@ -289,51 +297,42 @@ impl LeveledMphf {
                 // count pass first
                 // classify only after Poisson acceptance (rejected attempts skip BitSet + next_keys)
                 #[cfg(feature = "parallel")]
-                let (unique_count, next_keys, bs) = if n >= par_threshold {
-                    let (unique_count, counts) =
-                        par_count_pass(&remaining_keys, n, num_slots, om, &splitmix);
-                    // reject if the hash performed worse than the poisson expectation
-                    if (unique_count as f64) < expected_unique {
-                        num_attempts += 1;
-                        current_offset_multiplier += 1;
-                        continue;
-                    }
-                    let (next_keys, bs) = par_classify_pass(
-                        &remaining_keys,
-                        n,
-                        num_slots,
-                        unique_count,
-                        om,
-                        &splitmix,
-                        &counts,
-                    );
-                    (unique_count, next_keys, bs)
-                } else {
-                    let unique_count = seq_count_pass(
-                        &mut seq_counts[..num_slots],
-                        &remaining_keys,
-                        num_slots,
-                        om,
-                        &splitmix,
-                    );
-                    // reject if the hash performed worse than the poisson expectation
-                    if (unique_count as f64) < expected_unique {
-                        num_attempts += 1;
-                        current_offset_multiplier += 1;
-                        continue;
-                    }
-                    let (next_keys, bs) = seq_classify_pass(
-                        &seq_counts[..num_slots],
-                        &remaining_keys,
-                        num_slots,
-                        unique_count,
-                        om,
-                        &splitmix,
-                    );
-                    (unique_count, next_keys, bs)
-                };
+                // only large remaining_key sets pay Rayon overhead
+                let do_parallel = n >= par_threshold;
                 #[cfg(not(feature = "parallel"))]
-                let (unique_count, next_keys, bs) = {
+                // no Rayon in dependency graph
+                let do_parallel = false;
+
+                let (unique_count, next_keys, bs) = if do_parallel {
+                    #[cfg(feature = "parallel")]
+                    {
+                        let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
+                        let (unique_count, counts) =
+                            par_count_pass(&remaining_keys, chunk_size, num_slots, om, &splitmix);
+                        // reject if the hash performed worse than the poisson expectation
+                        if (unique_count as f64) < expected_unique {
+                            num_attempts += 1;
+                            current_offset_multiplier += 1;
+                            continue;
+                        }
+                        let (next_keys, bs) = par_classify_pass(
+                            &remaining_keys,
+                            chunk_size,
+                            n,
+                            num_slots,
+                            unique_count,
+                            om,
+                            &splitmix,
+                            &counts,
+                        );
+                        (unique_count, next_keys, bs)
+                    }
+                    #[cfg(not(feature = "parallel"))]
+                    {
+                        unreachable!("parallel path only when the parallel feature is enabled")
+                    }
+                } else {
+                    // sequential count + classify
                     let unique_count = seq_count_pass(
                         &mut seq_counts[..num_slots],
                         &remaining_keys,
@@ -347,15 +346,15 @@ impl LeveledMphf {
                         current_offset_multiplier += 1;
                         continue;
                     }
-                    let (next_keys, bs) = seq_classify_pass(
+                    let bs = seq_classify_pass_inplace(
                         &seq_counts[..num_slots],
-                        &remaining_keys,
+                        &mut remaining_keys,
                         num_slots,
                         unique_count,
                         om,
                         &splitmix,
                     );
-                    (unique_count, next_keys, bs)
+                    (unique_count, remaining_keys, bs)
                 };
 
                 level_meta.push(LevelMeta {

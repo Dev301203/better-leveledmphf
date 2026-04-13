@@ -6,6 +6,7 @@ resolver = "2"
 name = "better-mphf"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
 
 [features]
 default = ["parallel"]
