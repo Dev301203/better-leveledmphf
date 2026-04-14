@@ -101,7 +101,13 @@ fn num_slots(n: usize, gamma: f64) -> usize {
     ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
 }
 
-fn count_unique(keys: &[u64], num_slots: usize, family: HashFamily, om: u64, counts: &mut [u8]) -> usize {
+fn count_unique(
+    keys: &[u64],
+    num_slots: usize,
+    family: HashFamily,
+    om: u64,
+    counts: &mut [u8],
+) -> usize {
     counts[..num_slots].fill(0);
     for &key in keys {
         let idx = fastrange(hash_for_family(family, key, om), num_slots);

@@ -92,7 +92,9 @@ fn main() {
                     &keys,
                     SEED,
                     OFFSET,
-                    BuildOptions::default().fixed_gamma(EXPANSION).par_threshold(threshold),
+                    BuildOptions::default()
+                        .fixed_gamma(EXPANSION)
+                        .par_threshold(threshold),
                 );
             }
             let start = Instant::now();
@@ -101,7 +103,9 @@ fn main() {
                     &keys,
                     SEED,
                     OFFSET,
-                    BuildOptions::default().fixed_gamma(EXPANSION).par_threshold(threshold),
+                    BuildOptions::default()
+                        .fixed_gamma(EXPANSION)
+                        .par_threshold(threshold),
                 );
             }
             times[i] = (start.elapsed() / TIMED_RUNS).as_secs_f64();
@@ -165,7 +169,9 @@ fn main() {
                 &keys,
                 SEED,
                 OFFSET,
-                BuildOptions::default().fixed_gamma(EXPANSION).par_threshold(threshold),
+                BuildOptions::default()
+                    .fixed_gamma(EXPANSION)
+                    .par_threshold(threshold),
             );
             let start = Instant::now();
             for _ in 0..LOOKUP_TIMED {

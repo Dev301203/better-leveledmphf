@@ -178,7 +178,8 @@ fn par_count_pass(
                 buf.resize(num_slots, 0);
                 buf.fill(0);
                 for &k in chunk {
-                    let bit_idx = fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
+                    let bit_idx =
+                        fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
                     buf[bit_idx] = buf[bit_idx].saturating_add(1);
                 }
                 buf.clone()
@@ -335,8 +336,13 @@ impl LeveledMphf {
                     #[cfg(feature = "parallel")]
                     {
                         let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
-                        let (unique_count, counts) =
-                            par_count_pass(&remaining_keys, chunk_size, num_slots, retry_seed, &splitmix);
+                        let (unique_count, counts) = par_count_pass(
+                            &remaining_keys,
+                            chunk_size,
+                            num_slots,
+                            retry_seed,
+                            &splitmix,
+                        );
                         // reject if the hash performed worse than the poisson expectation
                         if (unique_count as f64) < expected_unique {
                             attempt_in_level += 1;

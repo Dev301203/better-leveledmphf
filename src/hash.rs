@@ -23,10 +23,7 @@ impl SplitMix64 {
     #[inline(always)]
     pub(crate) fn retry_seed(&self, attempt: u64, stream: u64) -> u64 {
         Self::mix(
-            self.base_seed
-                ^ self.retry_stream
-                ^ stream
-                ^ attempt.wrapping_mul(0x9e3779b97f4a7c15),
+            self.base_seed ^ self.retry_stream ^ stream ^ attempt.wrapping_mul(0x9e3779b97f4a7c15),
         )
     }
 
