@@ -15,11 +15,11 @@ const PAR_THRESHOLD: usize = 131_072;
 // Default γ base for auto-tuned construction.
 const AUTO_TUNED_GAMMA_BASE: f64 = 1.5;
 
-// Upper bound on total offset multiplier increments consumed across all levels and retries
+// Upper bound on total retry attempts consumed across all levels and retries
 const MAX_OFFSET_ATTEMPTS: u64 = 1024;
 
 struct LevelMeta {
-    offset_multiplier: u64,
+    retry_seed: u64,
     num_slots: usize,
     cumulative_rank: usize,
     keys_placed: usize,
@@ -86,7 +86,14 @@ pub struct LeveledMphf {
 
 #[inline(always)]
 fn fastrange(hash: u64, n: usize) -> usize {
-    ((hash as u128 * n as u128) >> 64) as usize
+    if n <= u32::MAX as usize {
+        // Fast path for common scales
+        // Uses the lower 32 bits of a 64-bit hash
+        ((((hash as u32) as u64) * (n as u32 as u64)) >> 32) as usize
+    } else {
+        // Fallback that preserves support for larger slot counts
+        ((hash as u128 * n as u128) >> 64) as usize
+    }
 }
 
 // one level attempt - count half (classify is seq_classify_pass after Poisson acceptance)
@@ -96,7 +103,7 @@ fn seq_count_pass(
     bucket_ids: &mut [u32],
     remaining_keys: &[u64],
     num_slots: usize,
-    om: u64,
+    retry_seed: u64,
     splitmix: &SplitMix64,
 ) -> usize {
     // counting pass
@@ -108,7 +115,7 @@ fn seq_count_pass(
     );
     seq_counts.fill(0);
     for (bucket_id, &k) in bucket_ids.iter_mut().zip(remaining_keys.iter()) {
-        let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+        let bit_idx = fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
         *bucket_id = bit_idx as u32;
         seq_counts[bit_idx] = seq_counts[bit_idx].saturating_add(1);
     }
@@ -158,7 +165,7 @@ fn par_count_pass(
     remaining_keys: &[u64],
     chunk_size: usize,
     num_slots: usize,
-    om: u64,
+    retry_seed: u64,
     splitmix: &SplitMix64,
 ) -> (usize, Vec<u8>) {
     // counting pass
@@ -171,7 +178,7 @@ fn par_count_pass(
                 buf.resize(num_slots, 0);
                 buf.fill(0);
                 for &k in chunk {
-                    let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+                    let bit_idx = fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
                     buf[bit_idx] = buf[bit_idx].saturating_add(1);
                 }
                 buf.clone()
@@ -201,7 +208,7 @@ fn par_classify_pass(
     n: usize,
     num_slots: usize,
     unique_count: usize,
-    om: u64,
+    retry_seed: u64,
     splitmix: &SplitMix64,
     counts: &[u8],
 ) -> (Vec<u64>, BitSet) {
@@ -212,7 +219,7 @@ fn par_classify_pass(
             let mut placed = Vec::new();
             let mut survivors = Vec::new();
             for &k in chunk {
-                let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+                let bit_idx = fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
                 if counts[bit_idx] == 1 {
                     placed.push(bit_idx);
                 } else {
@@ -268,7 +275,7 @@ impl LeveledMphf {
         let mut bitsets = Vec::new();
 
         let mut remaining_keys = keys.to_vec();
-        let mut current_offset_multiplier = 0u64;
+        let mut total_attempts = 0u64;
         let mut items_placed_so_far = 0;
 
         let gamma_base = options.auto_tuned_gamma_base;
@@ -290,7 +297,7 @@ impl LeveledMphf {
                 Some(g) => g,
                 None => {
                     let ratio = n as f64 / size as f64;
-                    gamma_base * (2.0 - ratio)
+                    gamma_base * (1.0 + ratio)
                 }
             };
             // oversize to a cache-line-aligned slot count
@@ -302,15 +309,18 @@ impl LeveledMphf {
             let load = n as f64 / num_slots as f64;
             let expected_unique = n as f64 * (-load).exp();
 
+            let level_index = level_meta.len() as u64;
+            let mut attempt_in_level = 0u64;
             loop {
-                if current_offset_multiplier >= MAX_OFFSET_ATTEMPTS {
+                if total_attempts >= MAX_OFFSET_ATTEMPTS {
                     panic!(
-                        "construction stalled after {} offset increments; try a different seed",
+                        "construction stalled after {} total attempts; try a different seed",
                         MAX_OFFSET_ATTEMPTS
                     );
                 }
 
-                let om = current_offset_multiplier;
+                let retry_seed = splitmix.retry_seed(attempt_in_level, level_index);
+                total_attempts += 1;
 
                 // count pass first
                 // classify only after Poisson acceptance (rejected attempts skip BitSet + next_keys)
@@ -326,10 +336,10 @@ impl LeveledMphf {
                     {
                         let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
                         let (unique_count, counts) =
-                            par_count_pass(&remaining_keys, chunk_size, num_slots, om, &splitmix);
+                            par_count_pass(&remaining_keys, chunk_size, num_slots, retry_seed, &splitmix);
                         // reject if the hash performed worse than the poisson expectation
                         if (unique_count as f64) < expected_unique {
-                            current_offset_multiplier += 1;
+                            attempt_in_level += 1;
                             continue;
                         }
                         let (next_keys, bs) = par_classify_pass(
@@ -338,13 +348,13 @@ impl LeveledMphf {
                             n,
                             num_slots,
                             unique_count,
-                            om,
+                            retry_seed,
                             &splitmix,
                             &counts,
                         );
 
                         level_meta.push(LevelMeta {
-                            offset_multiplier: om,
+                            retry_seed,
                             num_slots,
                             cumulative_rank: items_placed_so_far,
                             keys_placed: unique_count,
@@ -353,7 +363,6 @@ impl LeveledMphf {
 
                         items_placed_so_far += unique_count;
                         remaining_keys = next_keys;
-                        current_offset_multiplier += 1;
                         break;
                     }
                     #[cfg(not(feature = "parallel"))]
@@ -367,12 +376,12 @@ impl LeveledMphf {
                         &mut seq_bucket_ids[..n],
                         &remaining_keys,
                         num_slots,
-                        om,
+                        retry_seed,
                         &splitmix,
                     );
                     // reject if the hash performed worse than the poisson expectation
                     if (unique_count as f64) < expected_unique {
-                        current_offset_multiplier += 1;
+                        attempt_in_level += 1;
                         continue;
                     }
                     let bs = seq_classify_pass_inplace(
@@ -384,7 +393,7 @@ impl LeveledMphf {
                     );
 
                     level_meta.push(LevelMeta {
-                        offset_multiplier: om,
+                        retry_seed,
                         num_slots,
                         cumulative_rank: items_placed_so_far,
                         keys_placed: unique_count,
@@ -392,7 +401,6 @@ impl LeveledMphf {
                     bitsets.push(RankedBitSet::new(bs));
 
                     items_placed_so_far += unique_count;
-                    current_offset_multiplier += 1;
                     break;
                 }
             }
@@ -412,7 +420,7 @@ impl LeveledMphf {
         // lvl 0 peeled out since cumulative_rank is always 0
         // SAFETY: level_meta and bitsets are non-empty
         let meta0 = unsafe { self.level_meta.get_unchecked(0) };
-        let hash = self.splitmix.hash(key, meta0.offset_multiplier);
+        let hash = self.splitmix.hash_with_retry_seed(key, meta0.retry_seed);
         let bit_idx = fastrange(hash, meta0.num_slots);
         if let Some(rank) = unsafe { self.bitsets.get_unchecked(0) }.rank_if_set(bit_idx) {
             return rank;
@@ -420,7 +428,7 @@ impl LeveledMphf {
 
         for level in 1..self.level_meta.len() {
             let meta = &self.level_meta[level];
-            let hash = self.splitmix.hash(key, meta.offset_multiplier);
+            let hash = self.splitmix.hash_with_retry_seed(key, meta.retry_seed);
             let bit_idx = fastrange(hash, meta.num_slots);
             // SAFETY: bitsets.len() == level_meta.len(), and level < level_meta.len()
             if let Some(rank) = unsafe { self.bitsets.get_unchecked(level) }.rank_if_set(bit_idx) {
@@ -453,7 +461,7 @@ impl LeveledMphf {
         )
     }
 
-    // like [`new`](Self::new) but with adaptive γ per level: γ = AUTO_TUNED_GAMMA_BASE * (2 - n_remaining/n_original).
+    // like [`new`](Self::new) but with front-loaded adaptive γ per level: γ = AUTO_TUNED_GAMMA_BASE * (1 + n_remaining/n_original).
     pub fn new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Self {
         Self::build_unchecked(keys, seed, offset, BuildOptions::default().auto_tuned())
     }

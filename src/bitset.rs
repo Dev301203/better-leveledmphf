@@ -45,7 +45,7 @@ pub(crate) struct RankedBitSet {
 
 impl RankedBitSet {
     pub(crate) fn new(bs: BitSet) -> Self {
-        assert!(
+        debug_assert!(
             bs.data.as_ptr() as usize % CACHE_LINE_BYTES == 0,
             "BitSet vec is not cache aligned"
         );
