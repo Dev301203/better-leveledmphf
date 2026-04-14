@@ -1,4 +1,3 @@
-use core::panic;
 use std::collections::HashSet;
 
 #[cfg(feature = "parallel")]
@@ -10,12 +9,14 @@ use crate::bitset::CACHE_LINE_BITS;
 use crate::bitset::{BitSet, RankedBitSet};
 use crate::hash::SplitMix64;
 
-// Minimum number of keys before we spawn parallel work; below this, overhead dominates.
-// TODO: Test to find a good limit
+// Minimum number of keys before we spawn parallel work; below this, overhead dominates on current benchmarks
 const PAR_THRESHOLD: usize = 131_072;
 
-// Maximum γ when auto-tuning (2 * gamma_base); used for buffer sizing.
-const GAMMA_MAX: f64 = 3.0;
+// Default γ base for auto-tuned construction.
+const AUTO_TUNED_GAMMA_BASE: f64 = 1.5;
+
+// Upper bound on total offset multiplier increments consumed across all levels and retries
+const MAX_OFFSET_ATTEMPTS: u64 = 1024;
 
 struct LevelMeta {
     offset_multiplier: u64,
@@ -37,6 +38,46 @@ pub enum BuildError {
     DuplicateKey { key: u64 },
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct BuildOptions {
+    expansion_factor: Option<f64>,
+    auto_tuned_gamma_base: f64,
+    par_threshold: usize,
+}
+
+/// Defaults to auto-tuned construction with `AUTO_TUNED_GAMMA_BASE` and the crate default parallel threshold
+impl Default for BuildOptions {
+    fn default() -> Self {
+        Self {
+            expansion_factor: None,
+            auto_tuned_gamma_base: AUTO_TUNED_GAMMA_BASE,
+            par_threshold: PAR_THRESHOLD,
+        }
+    }
+}
+
+impl BuildOptions {
+    pub fn fixed_gamma(mut self, expansion_factor: f64) -> Self {
+        self.expansion_factor = Some(expansion_factor);
+        self
+    }
+
+    pub fn auto_tuned(mut self) -> Self {
+        self.expansion_factor = None;
+        self
+    }
+
+    pub fn auto_tuned_gamma_base(mut self, gamma_base: f64) -> Self {
+        self.auto_tuned_gamma_base = gamma_base;
+        self
+    }
+
+    pub fn par_threshold(mut self, par_threshold: usize) -> Self {
+        self.par_threshold = par_threshold;
+        self
+    }
+}
+
 pub struct LeveledMphf {
     splitmix: SplitMix64,
     level_meta: Vec<LevelMeta>,
@@ -52,16 +93,23 @@ fn fastrange(hash: u64, n: usize) -> usize {
 // sequential counting, unique count
 fn seq_count_pass(
     seq_counts: &mut [u8],
+    bucket_ids: &mut [u32],
     remaining_keys: &[u64],
     num_slots: usize,
     om: u64,
     splitmix: &SplitMix64,
 ) -> usize {
     // counting pass
-    // sequential path uses seq_counts
+    // sequential path uses seq_counts and caches bucket ids so accepted attempts do not rehash
+    debug_assert!(
+        num_slots <= u32::MAX as usize,
+        "num_slots {} exceeds cached bucket id range",
+        num_slots
+    );
     seq_counts.fill(0);
-    for &k in remaining_keys {
+    for (bucket_id, &k) in bucket_ids.iter_mut().zip(remaining_keys.iter()) {
         let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+        *bucket_id = bit_idx as u32;
         seq_counts[bit_idx] = seq_counts[bit_idx].saturating_add(1);
     }
     seq_counts.iter().filter(|&&c| c == 1).count()
@@ -74,18 +122,17 @@ fn seq_count_pass(
 // collision keys are gathered toward lower indices as we scan, then the vec length is set to the survivor count
 fn seq_classify_pass_inplace(
     seq_counts: &[u8],
+    bucket_ids: &[u32],
     remaining_keys: &mut Vec<u64>,
     num_slots: usize,
     unique_count: usize,
-    om: u64,
-    splitmix: &SplitMix64,
 ) -> BitSet {
     let mut bs = BitSet::new(num_slots);
     let n = remaining_keys.len();
     let mut w = 0usize;
     for i in 0..n {
         let k = remaining_keys[i];
-        let bit_idx = fastrange(splitmix.hash(k, om), num_slots);
+        let bit_idx = bucket_ids[i] as usize;
         if seq_counts[bit_idx] == 1 {
             bs.set(bit_idx);
         } else {
@@ -205,15 +252,9 @@ impl LeveledMphf {
         Ok(())
     }
 
-    fn build_unchecked(
-        keys: &[u64],
-        seed: u64,
-        offset: u64,
-        expansion_factor: Option<f64>,
-        par_threshold: usize,
-    ) -> Self {
+    fn build_unchecked(keys: &[u64], seed: u64, offset: u64, options: BuildOptions) -> Self {
         #[cfg(not(feature = "parallel"))]
-        let _ = par_threshold;
+        let _ = options.par_threshold;
 
         assert!(
             !keys.is_empty(),
@@ -230,8 +271,10 @@ impl LeveledMphf {
         let mut current_offset_multiplier = 0u64;
         let mut items_placed_so_far = 0;
 
-        let gamma_base = expansion_factor.unwrap_or(1.5);
-        let buffer_gamma = expansion_factor.unwrap_or(GAMMA_MAX);
+        let gamma_base = options.auto_tuned_gamma_base;
+        let buffer_gamma = options
+            .expansion_factor
+            .unwrap_or(options.auto_tuned_gamma_base * 2.0);
         // num_slots is strictly decreasing across levels, so allocate counts once at the maximum possible size
         // reuse it every iteration by zeroing only the [..num_slots] prefix
         let max_slots = {
@@ -239,10 +282,11 @@ impl LeveledMphf {
             ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
         };
         let mut seq_counts = vec![0u8; max_slots];
+        let mut seq_bucket_ids = vec![0u32; size];
 
         while !remaining_keys.is_empty() {
             let n = remaining_keys.len();
-            let gamma = match expansion_factor {
+            let gamma = match options.expansion_factor {
                 Some(g) => g,
                 None => {
                     let ratio = n as f64 / size as f64;
@@ -259,18 +303,25 @@ impl LeveledMphf {
             let expected_unique = n as f64 * (-load).exp();
 
             loop {
+                if current_offset_multiplier >= MAX_OFFSET_ATTEMPTS {
+                    panic!(
+                        "construction stalled after {} offset increments; try a different seed",
+                        MAX_OFFSET_ATTEMPTS
+                    );
+                }
+
                 let om = current_offset_multiplier;
 
                 // count pass first
                 // classify only after Poisson acceptance (rejected attempts skip BitSet + next_keys)
                 #[cfg(feature = "parallel")]
                 // only large remaining_key sets pay Rayon overhead
-                let do_parallel = n >= par_threshold;
+                let do_parallel = n >= options.par_threshold;
                 #[cfg(not(feature = "parallel"))]
                 // no Rayon in dependency graph
                 let do_parallel = false;
 
-                let (unique_count, next_keys, bs) = if do_parallel {
+                if do_parallel {
                     #[cfg(feature = "parallel")]
                     {
                         let chunk_size = n.div_ceil(rayon::current_num_threads()).max(1);
@@ -291,7 +342,19 @@ impl LeveledMphf {
                             &splitmix,
                             &counts,
                         );
-                        (unique_count, next_keys, bs)
+
+                        level_meta.push(LevelMeta {
+                            offset_multiplier: om,
+                            num_slots,
+                            cumulative_rank: items_placed_so_far,
+                            keys_placed: unique_count,
+                        });
+                        bitsets.push(RankedBitSet::new(bs));
+
+                        items_placed_so_far += unique_count;
+                        remaining_keys = next_keys;
+                        current_offset_multiplier += 1;
+                        break;
                     }
                     #[cfg(not(feature = "parallel"))]
                     {
@@ -301,6 +364,7 @@ impl LeveledMphf {
                     // sequential count + classify
                     let unique_count = seq_count_pass(
                         &mut seq_counts[..num_slots],
+                        &mut seq_bucket_ids[..n],
                         &remaining_keys,
                         num_slots,
                         om,
@@ -313,28 +377,24 @@ impl LeveledMphf {
                     }
                     let bs = seq_classify_pass_inplace(
                         &seq_counts[..num_slots],
+                        &seq_bucket_ids[..n],
                         &mut remaining_keys,
                         num_slots,
                         unique_count,
-                        om,
-                        &splitmix,
                     );
-                    (unique_count, remaining_keys, bs)
-                };
 
-                level_meta.push(LevelMeta {
-                    offset_multiplier: om,
-                    num_slots,
-                    cumulative_rank: items_placed_so_far,
-                    keys_placed: unique_count,
-                });
-                bitsets.push(RankedBitSet::new(bs));
+                    level_meta.push(LevelMeta {
+                        offset_multiplier: om,
+                        num_slots,
+                        cumulative_rank: items_placed_so_far,
+                        keys_placed: unique_count,
+                    });
+                    bitsets.push(RankedBitSet::new(bs));
 
-                items_placed_so_far += unique_count;
-                remaining_keys = next_keys;
-                current_offset_multiplier += 1;
-
-                break;
+                    items_placed_so_far += unique_count;
+                    current_offset_multiplier += 1;
+                    break;
+                }
             }
         }
 
@@ -385,55 +445,55 @@ impl LeveledMphf {
     }
 
     pub fn new(keys: &[u64], seed: u64, offset: u64, expansion_factor: f64) -> Self {
-        Self::build_unchecked(keys, seed, offset, Some(expansion_factor), PAR_THRESHOLD)
+        Self::build_unchecked(
+            keys,
+            seed,
+            offset,
+            BuildOptions::default().fixed_gamma(expansion_factor),
+        )
     }
 
-    // like [`new`](Self::new) but with adaptive γ per level: γ = 1.5 * (2 - n_remaining/n_original).
+    // like [`new`](Self::new) but with adaptive γ per level: γ = AUTO_TUNED_GAMMA_BASE * (2 - n_remaining/n_original).
     pub fn new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Self {
-        Self::build_unchecked(keys, seed, offset, None, PAR_THRESHOLD)
+        Self::build_unchecked(keys, seed, offset, BuildOptions::default().auto_tuned())
     }
 
+    pub fn new_with_options(keys: &[u64], seed: u64, offset: u64, options: BuildOptions) -> Self {
+        Self::build_unchecked(keys, seed, offset, options)
+    }
+
+    /// Validates that `keys` is non-empty and duplicate-free before construction.
+    /// This duplicate check allocates O(n) extra memory, so trusted large inputs should prefer [`new`](Self::new).
     pub fn try_new(
         keys: &[u64],
         seed: u64,
         offset: u64,
         expansion_factor: f64,
     ) -> Result<Self, BuildError> {
-        Self::try_new_with_par_threshold(keys, seed, offset, Some(expansion_factor), PAR_THRESHOLD)
-    }
-
-    pub fn try_new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Result<Self, BuildError> {
-        Self::try_new_with_par_threshold(keys, seed, offset, None, PAR_THRESHOLD)
-    }
-
-    // same as [`new`](Self::new) but with a configurable parallelization threshold
-    // `expansion_factor`: `Some(g)` = fixed γ; `None` = adaptive γ per level
-    // use `usize::MAX` for `par_threshold` to force serial construction
-    pub fn new_with_par_threshold(
-        keys: &[u64],
-        seed: u64,
-        offset: u64,
-        expansion_factor: Option<f64>,
-        par_threshold: usize,
-    ) -> Self {
-        Self::build_unchecked(keys, seed, offset, expansion_factor, par_threshold)
-    }
-
-    pub fn try_new_with_par_threshold(
-        keys: &[u64],
-        seed: u64,
-        offset: u64,
-        expansion_factor: Option<f64>,
-        par_threshold: usize,
-    ) -> Result<Self, BuildError> {
-        Self::validate_keys(keys)?;
-        Ok(Self::build_unchecked(
+        Self::try_new_with_options(
             keys,
             seed,
             offset,
-            expansion_factor,
-            par_threshold,
-        ))
+            BuildOptions::default().fixed_gamma(expansion_factor),
+        )
+    }
+
+    /// Validates that `keys` is non-empty and duplicate-free before construction.
+    /// This duplicate check allocates O(n) extra memory, so trusted large inputs should prefer [`new_auto_tuned`](Self::new_auto_tuned).
+    pub fn try_new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Result<Self, BuildError> {
+        Self::try_new_with_options(keys, seed, offset, BuildOptions::default().auto_tuned())
+    }
+
+    /// Validates that `keys` is non-empty and duplicate-free before construction.
+    /// This duplicate check allocates O(n) extra memory, so trusted large inputs should prefer [`new_with_options`](Self::new_with_options).
+    pub fn try_new_with_options(
+        keys: &[u64],
+        seed: u64,
+        offset: u64,
+        options: BuildOptions,
+    ) -> Result<Self, BuildError> {
+        Self::validate_keys(keys)?;
+        Ok(Self::build_unchecked(keys, seed, offset, options))
     }
 }
 
