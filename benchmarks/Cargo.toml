@@ -3,16 +3,6 @@ name = "mphf-benchmarks"
 version = "0.1.0"
 edition = "2021"
 
-[features]
-default = []
-parallel = ["better-mphf/parallel", "boomphf/parallel", "dep:rayon"]
-
 [dependencies]
 better-mphf = { path = ".." }
 boomphf = { version = "0.6", default-features = false }
-rayon = { version = "=1.9.0", optional = true }
-
-[[bin]]
-name = "bench_compare_parallel"
-path = "src/bin/bench_compare_parallel.rs"
-required-features = ["parallel"]

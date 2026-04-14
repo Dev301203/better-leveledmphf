@@ -1,18 +1,4 @@
 #!/usr/bin/env bash
-#
-# Serial benchmark
-#
-# Run under Slurm (e.g. from comps[0-3].cs):
-#
-#   cd /path/to/better-leveledmphf
-#   srun --partition cpunodes -c 8 --mem=16G -t 0-4:00 --pty ./scripts/run_serial_bench.sh
-#
-# Text output: bench-results/serial-<jobid>.txt (override dir: export MPHF_BENCH_RESULTS_DIR=/path/to/dir).
-#
-# Optional env (export before srun):
-#   MPHF_BENCH_WARMUP, MPHF_BENCH_TIMED — override warmup/timed counts (benchmarks/src/lib.rs)
-#   CXX — C++ compiler (default: g++)
-
 set -euo pipefail
 
 REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
@@ -26,28 +12,61 @@ if [[ -f "${HOME}/.cargo/env" ]]; then
   source "${HOME}/.cargo/env"
 fi
 
-echo "==> $(date -Is)  repo=${REPO_ROOT}"
-echo "==> host=$(hostname)  SLURM_JOB_ID=${SLURM_JOB_ID:-}  SLURM_CPUS_ON_NODE=${SLURM_CPUS_ON_NODE:-}"
-command -v cargo >/dev/null
-command -v rustc >/dev/null
-rustc --version
-cargo --version
-command -v "${CXX:-g++}" >/dev/null
-"${CXX:-g++}" --version | head -1
-
-echo "==> Building Rust: mphf-benchmarks (release)"
-cargo build -p mphf-benchmarks --release
-
-echo "==> Building C++: benchmarks/cpp/bbhash_bench"
-mkdir -p benchmarks/cpp
-"${CXX:-g++}" -O3 -pthread -std=c++14 \
-  -o benchmarks/cpp/bbhash_bench \
-  benchmarks/cpp/bbhash_bench.cpp
-
+WARMUP=${MPHF_BENCH_WARMUP:-2}
+TIMED=${MPHF_BENCH_TIMED:-7}
+LOOKUP_TIMED=${MPHF_BENCH_LOOKUP_TIMED:-5}
+AUTO_GAMMA_BASE=${MPHF_BENCH_AUTO_GAMMA_BASE:-1.5}
 RESULTS_DIR="${MPHF_BENCH_RESULTS_DIR:-${REPO_ROOT}/bench-results}"
 mkdir -p "$RESULTS_DIR"
-OUT="${RESULTS_DIR}/serial-${SLURM_JOB_ID:-local}.txt"
-echo "==> Running bench_compare (tee -> ${OUT})"
-cargo run -p mphf-benchmarks --bin bench_compare --release 2>&1 | tee "$OUT"
+RUN_PREFIX="${MPHF_BENCH_RUN_PREFIX:-serial-bench}"
+OUT="${RESULTS_DIR}/${RUN_PREFIX}-${SLURM_JOB_ID:-local}.csv"
+ERR="${RESULTS_DIR}/${RUN_PREFIX}-${SLURM_JOB_ID:-local}.log"
 
-echo "==> $(date -Is)  finished; main table copy: ${OUT}"
+NS=(512 1024 2048 4096 8192 16384 32768 65536 131072 262144 524288 1048576 2097152)
+GAMMAS=(1.15 1.25 1.35 1.5 1.65 1.8 2.0 2.25 2.5)
+
+: > "$OUT"
+: > "$ERR"
+
+echo "==> $(date -Is) repo=${REPO_ROOT}" | tee -a "$ERR"
+echo "==> host=$(hostname) warmup=${WARMUP} timed=${TIMED} lookup_timed=${LOOKUP_TIMED} auto_gamma_base=${AUTO_GAMMA_BASE}" | tee -a "$ERR"
+echo "==> fairness note: boomphf-rust and bbhash-cpp expose fixed gamma only; better-mphf auto-gamma is emitted as a separate extra series" | tee -a "$ERR"
+
+echo "==> Building Rust runners" | tee -a "$ERR"
+cargo build -p mphf-benchmarks --release --bin bench_better_runner --bin bench_boom_runner 2>&1 | tee -a "$ERR"
+
+BETTER_BIN="${REPO_ROOT}/target/release/bench_better_runner"
+BOOM_BIN="${REPO_ROOT}/target/release/bench_boom_runner"
+
+echo "==> Building C++ runner" | tee -a "$ERR"
+"${CXX:-g++}" -O3 -pthread -std=c++14   -o benchmarks/cpp/bbhash_runner   benchmarks/cpp/bbhash_runner.cpp 2>&1 | tee -a "$ERR"
+
+emit_runner_csv() {
+  local runner=$1
+  shift
+  local tmp
+  tmp=$(mktemp)
+  "$runner" "$@" > "$tmp" 2>> "$ERR"
+  if [[ ! -s "$OUT" ]]; then
+    cat "$tmp" >> "$OUT"
+  else
+    tail -n +2 "$tmp" >> "$OUT"
+  fi
+  rm -f "$tmp"
+}
+
+for gamma in "${GAMMAS[@]}"; do
+  for n in "${NS[@]}"; do
+    echo "==> gamma=${gamma} n=${n}" | tee -a "$ERR"
+    emit_runner_csv "$BETTER_BIN"       --n "$n" --gamma "$gamma" --warmup "$WARMUP" --timed "$TIMED" --lookup-timed "$LOOKUP_TIMED"
+    emit_runner_csv "$BOOM_BIN"       --n "$n" --gamma "$gamma" --warmup "$WARMUP" --timed "$TIMED" --lookup-timed "$LOOKUP_TIMED"
+    emit_runner_csv ./benchmarks/cpp/bbhash_runner       --n "$n" --gamma "$gamma" --warmup "$WARMUP" --timed "$TIMED" --lookup-timed "$LOOKUP_TIMED" --threads 1
+  done
+done
+
+for n in "${NS[@]}"; do
+  echo "==> gamma=auto n=${n}" | tee -a "$ERR"
+  emit_runner_csv "$BETTER_BIN"     --n "$n" --auto-gamma --gamma-base "$AUTO_GAMMA_BASE" --warmup "$WARMUP" --timed "$TIMED" --lookup-timed "$LOOKUP_TIMED"
+done
+
+echo "==> finished csv=${OUT} log=${ERR}" | tee -a "$ERR"

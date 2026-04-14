@@ -4,7 +4,7 @@
 //!
 //! Without the `parallel` feature, every threshold behaves the same (serial only).
 
-use better_mphf::LeveledMphf;
+use better_mphf::{BuildOptions, LeveledMphf};
 use std::hint::black_box;
 use std::time::Instant;
 
@@ -88,22 +88,20 @@ fn main() {
         for &i in &indices_to_run {
             let threshold = THRESHOLDS[i];
             for _ in 0..WARMUP_RUNS {
-                let _ = LeveledMphf::new_with_par_threshold(
+                let _ = LeveledMphf::new_with_options(
                     &keys,
                     SEED,
                     OFFSET,
-                    Some(EXPANSION),
-                    threshold,
+                    BuildOptions::default().fixed_gamma(EXPANSION).par_threshold(threshold),
                 );
             }
             let start = Instant::now();
             for _ in 0..TIMED_RUNS {
-                let _ = LeveledMphf::new_with_par_threshold(
+                let _ = LeveledMphf::new_with_options(
                     &keys,
                     SEED,
                     OFFSET,
-                    Some(EXPANSION),
-                    threshold,
+                    BuildOptions::default().fixed_gamma(EXPANSION).par_threshold(threshold),
                 );
             }
             times[i] = (start.elapsed() / TIMED_RUNS).as_secs_f64();
@@ -163,12 +161,11 @@ fn main() {
         let mut lookup_ms = vec![f64::NAN; THRESHOLDS.len()];
         for &i in &indices_to_run {
             let threshold = THRESHOLDS[i];
-            let mphf = LeveledMphf::new_with_par_threshold(
+            let mphf = LeveledMphf::new_with_options(
                 &keys,
                 SEED,
                 OFFSET,
-                Some(EXPANSION),
-                threshold,
+                BuildOptions::default().fixed_gamma(EXPANSION).par_threshold(threshold),
             );
             let start = Instant::now();
             for _ in 0..LOOKUP_TIMED {
