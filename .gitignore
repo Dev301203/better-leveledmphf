@@ -1,5 +1,16 @@
 /target
-bench-results/
+bench-results/*
+!bench-results/serial-bench.csv
+!bench-results/serial-bench.log
+!bench-results/serial-fixed.csv
+!bench-results/serial-fixed.log
+!bench-results/serial-auto.csv
+!bench-results/serial-auto.log
+!bench-results/serial-merged.csv
+!bench-results/serial-keymode.csv
+!bench-results/serial-keymode.log
+!bench-results/serial-fastrange.csv
+!bench-results/serial-fastrange.log
 benchmarks/cpp/bbhash_bench
 benchmarks/cpp/bbhash_runner
 benchmarks/cpp/bbhash_bench.exe

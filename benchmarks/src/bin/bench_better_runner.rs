@@ -10,7 +10,7 @@ use std::time::Instant;
 
 const DEFAULT_AUTO_GAMMA_BASE: f64 = 1.5;
 const DEFAULT_KEY_MODE: &str = "multiplicative";
-const DEFAULT_FASTRANGE_MODE: &str = "low32";
+const DEFAULT_FASTRANGE_MODE: &str = "mul64";
 
 struct Config {
     n: usize,

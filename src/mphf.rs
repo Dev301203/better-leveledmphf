@@ -68,8 +68,8 @@ impl Default for BuildOptions {
         Self {
             expansion_factor: None,
             auto_tuned_gamma_base: AUTO_TUNED_GAMMA_BASE,
-            auto_tuned_gamma_shape: AutoGammaShape::Pow10,
-            fastrange_mode: FastRangeMode::Low32,
+            auto_tuned_gamma_shape: AutoGammaShape::Piecewise,
+            fastrange_mode: FastRangeMode::Mul64,
             par_threshold: PAR_THRESHOLD,
         }
     }
