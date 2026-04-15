@@ -1,7 +1,6 @@
 pub const CACHE_LINE_BYTES: usize = 64;
 pub const CACHE_LINE_BITS: usize = CACHE_LINE_BYTES * 8;
 
-
 #[repr(C, align(64))]
 #[derive(Clone, Default)]
 struct CacheLine {
@@ -37,20 +36,6 @@ impl BitSet {
         let mask = 1u64 << bit_idx;
         self.data[cache_line_idx].line[u64_idx] |= mask;
     }
-
-    #[inline(always)]
-    pub fn get(&self, idx: usize) -> bool {
-        debug_assert!(
-            idx < self.size,
-            "index {idx} out of bounds for BitSet of size {}",
-            self.size
-        );
-        let cache_line_idx = idx >> 9;
-        let u64_idx = (idx & 511) >> 6;
-        let bit_idx = idx & 63;
-        let mask = 1u64 << bit_idx;
-        self.data[cache_line_idx].line[u64_idx] & mask != 0
-    }
 }
 
 pub(crate) struct RankedBitSet {
@@ -60,7 +45,7 @@ pub(crate) struct RankedBitSet {
 
 impl RankedBitSet {
     pub(crate) fn new(bs: BitSet) -> Self {
-        assert!(
+        debug_assert!(
             bs.data.as_ptr() as usize % CACHE_LINE_BYTES == 0,
             "BitSet vec is not cache aligned"
         );
@@ -77,11 +62,6 @@ impl RankedBitSet {
         }
 
         RankedBitSet { bs, rank_prefix }
-    }
-
-    #[inline(always)]
-    pub(crate) fn get(&self, idx: usize) -> bool {
-        self.bs.get(idx)
     }
 
     // returns Some(rank) if the bit at idx is set, None otherwise
@@ -110,9 +90,29 @@ impl RankedBitSet {
         count += (word & partial_mask).count_ones() as usize;
         Some(count)
     }
+}
 
+#[cfg(test)]
+impl BitSet {
     #[inline(always)]
-    pub(crate) fn rank(&self, idx: usize) -> usize {
+    fn get(&self, idx: usize) -> bool {
+        debug_assert!(
+            idx < self.size,
+            "index {idx} out of bounds for BitSet of size {}",
+            self.size
+        );
+        let cache_line_idx = idx >> 9;
+        let u64_idx = (idx & 511) >> 6;
+        let bit_idx = idx & 63;
+        let mask = 1u64 << bit_idx;
+        self.data[cache_line_idx].line[u64_idx] & mask != 0
+    }
+}
+
+#[cfg(test)]
+impl RankedBitSet {
+    #[inline(always)]
+    fn rank(&self, idx: usize) -> usize {
         debug_assert!(
             idx < self.bs.size,
             "index {idx} out of bounds for RankedBitSet of size {}",
@@ -189,8 +189,8 @@ mod tests {
         bs.set(7);
         bs.set(10);
         let rbs = RankedBitSet::new(bs);
-        assert_eq!(rbs.rank(3), 0);  // nothing before index 3
-        assert_eq!(rbs.rank(7), 1);  // {3}
+        assert_eq!(rbs.rank(3), 0); // nothing before index 3
+        assert_eq!(rbs.rank(7), 1); // {3}
         assert_eq!(rbs.rank(10), 2); // {3, 7}
         assert_eq!(rbs.rank(11), 3); // {3, 7, 10}
         assert_eq!(rbs.rank(99), 3); // still only three set bits
@@ -202,14 +202,14 @@ mod tests {
         let boundary = CACHE_LINE_BITS; // 512
         let mut bs = BitSet::new(boundary * 2);
         bs.set(boundary - 12); // in cache line 0
-        bs.set(boundary - 1);  // last bit of cache line 0
-        bs.set(boundary + 7);  // in cache line 1
+        bs.set(boundary - 1); // last bit of cache line 0
+        bs.set(boundary + 7); // in cache line 1
         let rbs = RankedBitSet::new(bs);
 
         assert_eq!(rbs.rank(boundary - 12), 0); // nothing before it
-        assert_eq!(rbs.rank(boundary - 1), 1);  // {boundary-12}
-        assert_eq!(rbs.rank(boundary), 2);       // {boundary-12, boundary-1}
-        assert_eq!(rbs.rank(boundary + 7), 2);  // same two; boundary+7 not yet counted
-        assert_eq!(rbs.rank(boundary + 8), 3);  // now includes boundary+7
+        assert_eq!(rbs.rank(boundary - 1), 1); // {boundary-12}
+        assert_eq!(rbs.rank(boundary), 2); // {boundary-12, boundary-1}
+        assert_eq!(rbs.rank(boundary + 7), 2); // same two; boundary+7 not yet counted
+        assert_eq!(rbs.rank(boundary + 8), 3); // now includes boundary+7
     }
 }

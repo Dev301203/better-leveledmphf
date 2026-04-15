@@ -1,0 +1,636 @@
+==> 2026-04-15T16:11:22-04:00 repo=/u/devanshu/better-leveledmphf
+==> host=cpunode10 warmup=2 timed=7 lookup_timed=5
+==> run_fixed=0 run_auto=1 run_baselines=0
+==> seed_indices=0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 key_modes=multiplicative
+==> fixed_gammas=1.15 1.25 1.35 1.5 1.65 1.8 2.0 2.25 2.5 auto_gamma_bases=1.5 auto_shape=fixed-piecewise
+==> fastrange_modes=mul64
+==> estimated_cells better_fixed=1872 better_auto=208 baselines=1872
+==> fairness note: boomphf-rust and bbhash-cpp expose fixed gamma only; better-mphf auto-gamma is emitted as a separate extra series
+==> Building Rust runners
+    Finished release [optimized + debuginfo] target(s) in 0.09s
+==> Building C++ runner
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.003391,min_ms=0.003369,max_ms=0.003829,mean_ms=0.003456,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006091,min_ms=0.005860,max_ms=0.009940,mean_ms=0.007450,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.007820,min_ms=0.007800,max_ms=0.008560,mean_ms=0.007929,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012790,min_ms=0.012170,max_ms=0.020770,mean_ms=0.015560,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.015350,min_ms=0.015220,max_ms=0.015800,mean_ms=0.015396,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025750,min_ms=0.024250,max_ms=0.051740,mean_ms=0.033332,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.035340,min_ms=0.034870,max_ms=0.042380,mean_ms=0.036624,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053570,min_ms=0.048150,max_ms=0.083860,mean_ms=0.063206,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.103030,min_ms=0.102040,max_ms=0.110920,mean_ms=0.104626,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.144380,min_ms=0.118680,max_ms=0.197820,mean_ms=0.155422,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.220630,min_ms=0.217200,max_ms=0.244980,mean_ms=0.224796,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.332070,min_ms=0.283180,max_ms=0.339780,mean_ms=0.318490,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.377710,min_ms=0.334730,max_ms=0.461850,mean_ms=0.387896,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.709880,min_ms=0.696120,max_ms=0.728360,mean_ms=0.710444,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.082440,min_ms=1.075080,max_ms=1.103100,mean_ms=1.084764,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.438000,min_ms=1.428990,max_ms=1.444280,mean_ms=1.437720,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.886520,min_ms=1.687770,max_ms=1.978740,mean_ms=1.843206,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.833540,min_ms=3.417590,max_ms=4.029800,mean_ms=3.784742,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=7.550520,min_ms=3.682710,max_ms=9.002050,mean_ms=6.718475,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.026460,min_ms=6.013009,max_ms=6.032440,mean_ms=6.023024,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.534400,min_ms=7.513670,max_ms=7.635619,mean_ms=7.553721,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.589930,min_ms=12.587179,max_ms=12.604529,mean_ms=12.593399,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=16.204479,min_ms=16.112810,max_ms=16.275389,mean_ms=16.206501,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=29.482398,min_ms=29.406629,max_ms=29.724268,mean_ms=29.515030,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=0 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=51.414537,min_ms=50.971817,max_ms=52.051157,mean_ms=51.446664,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.115086,min_ms=66.015586,max_ms=76.431655,mean_ms=69.489994,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.003530,min_ms=0.003450,max_ms=0.003870,mean_ms=0.003554,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006280,min_ms=0.005930,max_ms=0.010480,mean_ms=0.007700,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.007780,min_ms=0.007680,max_ms=0.008369,mean_ms=0.007848,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012269,min_ms=0.012040,max_ms=0.020420,mean_ms=0.014974,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.023271,min_ms=0.023229,max_ms=0.024071,mean_ms=0.023379,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025540,min_ms=0.024251,max_ms=0.041151,mean_ms=0.031074,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.033860,min_ms=0.031660,max_ms=0.034109,mean_ms=0.033267,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053631,min_ms=0.048729,max_ms=0.083200,mean_ms=0.063212,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.059590,min_ms=0.058810,max_ms=0.074660,mean_ms=0.061983,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.118750,min_ms=0.097791,max_ms=0.168930,mean_ms=0.131032,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.154830,min_ms=0.154120,max_ms=0.175630,mean_ms=0.157980,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.329649,min_ms=0.284960,max_ms=0.341040,mean_ms=0.319182,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.354060,min_ms=0.329920,max_ms=0.460100,mean_ms=0.374151,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.669260,min_ms=0.665100,max_ms=0.687969,mean_ms=0.674580,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.071480,min_ms=1.066880,max_ms=1.089790,mean_ms=1.074964,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.402700,min_ms=1.398780,max_ms=1.413110,mean_ms=1.405296,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.560100,min_ms=1.551090,max_ms=1.578190,mean_ms=1.561758,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.006840,min_ms=3.000730,max_ms=3.010180,mean_ms=3.006094,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=4.190849,min_ms=4.182750,max_ms=4.214450,mean_ms=4.193564,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.044310,min_ms=6.038339,max_ms=6.274310,mean_ms=6.089332,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=10.355130,min_ms=10.296889,max_ms=10.661159,mean_ms=10.399272,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.568580,min_ms=12.562189,max_ms=12.666340,mean_ms=12.589626,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=45.616277,min_ms=44.834287,max_ms=46.296198,mean_ms=45.581320,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=29.002918,min_ms=28.974198,max_ms=29.094589,mean_ms=29.019212,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=1 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=42.990787,min_ms=41.893398,max_ms=44.530868,mean_ms=42.993466,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=66.513196,min_ms=66.366626,max_ms=73.340385,mean_ms=67.828798,seed=3600363574174988349,offset=13668450614719034006,seed_index=1,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.006651,min_ms=0.006531,max_ms=0.007049,mean_ms=0.006677,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006120,min_ms=0.005800,max_ms=0.010080,mean_ms=0.007502,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.026880,min_ms=0.026850,max_ms=0.030180,mean_ms=0.027396,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012720,min_ms=0.012070,max_ms=0.021110,mean_ms=0.015628,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.016440,min_ms=0.016330,max_ms=0.024690,mean_ms=0.018714,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.024960,min_ms=0.024080,max_ms=0.042170,mean_ms=0.030636,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.041970,min_ms=0.039950,max_ms=0.048600,mean_ms=0.042577,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.052840,min_ms=0.048390,max_ms=0.084400,mean_ms=0.062518,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.146600,min_ms=0.144450,max_ms=0.170190,mean_ms=0.149830,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.125390,min_ms=0.097790,max_ms=0.170290,mean_ms=0.133856,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.343900,min_ms=0.335800,max_ms=0.391800,mean_ms=0.353554,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.323350,min_ms=0.290080,max_ms=0.342630,mean_ms=0.319456,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.479970,min_ms=0.458751,max_ms=0.582180,mean_ms=0.498390,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.669770,min_ms=0.665470,max_ms=0.689609,mean_ms=0.674596,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.964390,min_ms=1.958679,max_ms=1.970860,mean_ms=1.964577,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.469900,min_ms=1.466770,max_ms=1.477790,mean_ms=1.472228,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.496750,min_ms=1.483960,max_ms=1.505809,mean_ms=1.498296,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.935159,min_ms=2.929880,max_ms=2.939380,mean_ms=2.934278,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.451329,min_ms=3.438499,max_ms=3.454840,mean_ms=3.448263,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.032250,min_ms=6.028929,max_ms=6.041139,mean_ms=6.034083,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=6.894190,min_ms=6.872880,max_ms=6.997040,mean_ms=6.908115,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.512479,min_ms=12.502659,max_ms=12.557449,mean_ms=12.522393,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=20.679609,min_ms=20.541078,max_ms=21.304679,mean_ms=20.799552,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.861338,min_ms=28.834598,max_ms=28.871678,mean_ms=28.854220,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=2 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=32.183429,min_ms=31.975958,max_ms=34.516658,mean_ms=32.833687,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=69.983496,min_ms=66.933286,max_ms=74.825905,mean_ms=70.040776,seed=12901796495910421529,offset=12401290971536666666,seed_index=2,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.006410,min_ms=0.006370,max_ms=0.007080,mean_ms=0.006516,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006270,min_ms=0.006120,max_ms=0.010100,mean_ms=0.007654,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.007570,min_ms=0.007520,max_ms=0.008200,mean_ms=0.007651,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012500,min_ms=0.012160,max_ms=0.020810,mean_ms=0.015194,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.014160,min_ms=0.013980,max_ms=0.015709,mean_ms=0.014443,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025409,min_ms=0.024089,max_ms=0.041589,mean_ms=0.031162,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.098810,min_ms=0.098410,max_ms=0.100980,mean_ms=0.099280,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.054030,min_ms=0.048830,max_ms=0.088160,mean_ms=0.064888,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.080260,min_ms=0.079670,max_ms=0.090480,mean_ms=0.081856,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.123830,min_ms=0.097190,max_ms=0.174370,mean_ms=0.133162,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.138490,min_ms=0.138010,max_ms=0.156750,mean_ms=0.141996,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.318570,min_ms=0.277700,max_ms=0.338390,mean_ms=0.313404,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.399950,min_ms=0.388770,max_ms=0.482710,mean_ms=0.416080,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.682770,min_ms=0.670330,max_ms=0.688890,mean_ms=0.680320,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.462960,min_ms=1.435620,max_ms=1.482129,mean_ms=1.463243,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.410350,min_ms=1.405070,max_ms=1.421520,mean_ms=1.411522,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=3.615640,min_ms=3.599820,max_ms=3.636530,mean_ms=3.614496,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.014960,min_ms=3.010090,max_ms=3.025269,mean_ms=3.017856,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=4.300840,min_ms=4.292909,max_ms=4.318150,mean_ms=4.302780,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.005820,min_ms=6.002040,max_ms=6.413929,mean_ms=6.087500,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=9.709780,min_ms=9.675100,max_ms=9.957120,mean_ms=9.748987,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.462640,min_ms=12.456779,max_ms=12.495979,mean_ms=12.470173,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=20.168199,min_ms=20.042359,max_ms=20.291659,mean_ms=20.159892,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.673189,min_ms=28.635378,max_ms=29.692558,mean_ms=28.991834,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=3 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=63.538376,min_ms=62.051337,max_ms=64.343706,mean_ms=63.377476,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=66.111467,min_ms=65.948476,max_ms=72.269765,mean_ms=68.508538,seed=5530664623608240940,offset=2264626280218863376,seed_index=3,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.006860,min_ms=0.006830,max_ms=0.007240,mean_ms=0.006920,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006190,min_ms=0.005980,max_ms=0.010160,mean_ms=0.007620,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.014831,min_ms=0.014820,max_ms=0.015220,mean_ms=0.014893,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012800,min_ms=0.012120,max_ms=0.020820,mean_ms=0.015610,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.015160,min_ms=0.014960,max_ms=0.017020,mean_ms=0.015470,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.032700,min_ms=0.024420,max_ms=0.041711,mean_ms=0.032800,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.034140,min_ms=0.031950,max_ms=0.034270,mean_ms=0.033540,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053980,min_ms=0.048540,max_ms=0.083910,mean_ms=0.063502,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.061840,min_ms=0.061370,max_ms=0.069690,mean_ms=0.063741,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.120010,min_ms=0.097960,max_ms=0.169970,mean_ms=0.131594,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.340100,min_ms=0.336490,max_ms=0.354040,mean_ms=0.341746,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.324380,min_ms=0.284230,max_ms=0.345580,mean_ms=0.319746,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.349520,min_ms=0.337749,max_ms=0.429080,mean_ms=0.366046,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.682491,min_ms=0.668110,max_ms=0.693429,mean_ms=0.680740,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.153240,min_ms=1.141430,max_ms=1.188800,mean_ms=1.158076,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.462680,min_ms=1.453010,max_ms=1.469210,mean_ms=1.461136,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.804200,min_ms=1.789849,max_ms=1.820370,mean_ms=1.806338,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.978160,min_ms=2.975170,max_ms=2.987360,mean_ms=2.980106,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.425869,min_ms=3.415399,max_ms=3.433030,mean_ms=3.425302,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.000070,min_ms=5.995069,max_ms=6.016420,mean_ms=6.002586,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.423960,min_ms=7.379929,max_ms=7.511039,mean_ms=7.425542,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.571700,min_ms=12.552369,max_ms=12.895689,mean_ms=12.633149,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=15.813199,min_ms=15.771949,max_ms=16.257299,mean_ms=15.876885,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.544738,min_ms=28.474588,max_ms=30.453838,mean_ms=28.918790,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=4 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=31.904028,min_ms=31.607708,max_ms=32.279547,mean_ms=31.949389,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.530466,min_ms=66.317836,max_ms=72.598446,mean_ms=68.411052,seed=1089038237705845058,offset=7015790347438550755,seed_index=4,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.005880,min_ms=0.005870,max_ms=0.006690,mean_ms=0.006010,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.008310,min_ms=0.008010,max_ms=0.013930,mean_ms=0.010258,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.051620,min_ms=0.051410,max_ms=0.053390,mean_ms=0.051814,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.033120,min_ms=0.030910,max_ms=0.053920,mean_ms=0.040322,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.035430,min_ms=0.035320,max_ms=0.038050,mean_ms=0.035804,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.071380,min_ms=0.060220,max_ms=0.103570,mean_ms=0.080008,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.149140,min_ms=0.148960,max_ms=0.163840,mean_ms=0.152129,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.136810,min_ms=0.121570,max_ms=0.221800,mean_ms=0.162704,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.197740,min_ms=0.196420,max_ms=0.214900,mean_ms=0.201369,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.307729,min_ms=0.244449,max_ms=0.434740,mean_ms=0.329110,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.342920,min_ms=0.331150,max_ms=0.379880,mean_ms=0.345943,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.812200,min_ms=0.703570,max_ms=0.859550,mean_ms=0.796104,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.703140,min_ms=0.682240,max_ms=0.900440,mean_ms=0.746227,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=1.704920,min_ms=1.682070,max_ms=1.733550,mean_ms=1.705806,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=3.271700,min_ms=3.224440,max_ms=3.324360,mean_ms=3.263883,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=3.436170,min_ms=3.150680,max_ms=3.535619,mean_ms=3.363774,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=4.405279,min_ms=4.382210,max_ms=4.408520,mean_ms=4.398961,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.250820,min_ms=2.964440,max_ms=6.698470,mean_ms=4.514814,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=6.401090,min_ms=6.389299,max_ms=6.414219,mean_ms=6.401373,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.001409,min_ms=6.000840,max_ms=6.014750,mean_ms=6.005276,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.032719,min_ms=6.998700,max_ms=7.096780,mean_ms=7.043798,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.743839,min_ms=12.658309,max_ms=12.935109,mean_ms=12.755999,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=26.313278,min_ms=26.147449,max_ms=26.507959,mean_ms=26.313510,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.795178,min_ms=28.687339,max_ms=30.340278,mean_ms=29.074594,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=5 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=43.380208,min_ms=43.118918,max_ms=44.034658,mean_ms=43.537571,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.487086,min_ms=65.862596,max_ms=74.833725,mean_ms=69.154642,seed=17452464845152596051,offset=17876271046910744372,seed_index=5,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.005310,min_ms=0.005290,max_ms=0.005800,mean_ms=0.005394,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006540,min_ms=0.006160,max_ms=0.010530,mean_ms=0.007914,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.007910,min_ms=0.007870,max_ms=0.017560,mean_ms=0.009289,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012290,min_ms=0.012030,max_ms=0.020580,mean_ms=0.015010,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.022590,min_ms=0.022440,max_ms=0.030960,mean_ms=0.024096,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025940,min_ms=0.024120,max_ms=0.042170,mean_ms=0.031494,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.029200,min_ms=0.028560,max_ms=0.037280,mean_ms=0.030561,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.054360,min_ms=0.048920,max_ms=0.084410,mean_ms=0.063858,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.062480,min_ms=0.061740,max_ms=0.071550,mean_ms=0.064636,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.122740,min_ms=0.097770,max_ms=0.170300,mean_ms=0.132000,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.122590,min_ms=0.122260,max_ms=0.142020,mean_ms=0.125846,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.330110,min_ms=0.298040,max_ms=0.341680,mean_ms=0.325340,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.399930,min_ms=0.389530,max_ms=0.478210,mean_ms=0.416153,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.679060,min_ms=0.665970,max_ms=0.685970,mean_ms=0.676608,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.613899,min_ms=1.604450,max_ms=1.636720,mean_ms=1.615141,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.430470,min_ms=1.422860,max_ms=1.441330,mean_ms=1.430684,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.469970,min_ms=1.459060,max_ms=1.477670,mean_ms=1.468460,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.936149,min_ms=2.932120,max_ms=2.937871,mean_ms=2.935332,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.740510,min_ms=3.731090,max_ms=3.752580,mean_ms=3.739891,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.050800,min_ms=6.045559,max_ms=6.055479,mean_ms=6.050718,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.418129,min_ms=7.401800,max_ms=7.483019,mean_ms=7.428790,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.533919,min_ms=12.521579,max_ms=12.771179,mean_ms=12.578255,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=26.602009,min_ms=26.485468,max_ms=26.839739,mean_ms=26.618031,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.745329,min_ms=28.624288,max_ms=30.110058,mean_ms=29.032950,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=6 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=36.108969,min_ms=35.591368,max_ms=37.025178,mean_ms=36.335935,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=69.721406,min_ms=66.537086,max_ms=73.976486,mean_ms=69.586160,seed=16516684943475082461,offset=1853361749927424196,seed_index=6,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.004450,min_ms=0.004430,max_ms=0.006020,mean_ms=0.004697,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006320,min_ms=0.005970,max_ms=0.010350,mean_ms=0.007800,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.008740,min_ms=0.008720,max_ms=0.009510,mean_ms=0.008856,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012680,min_ms=0.012060,max_ms=0.020450,mean_ms=0.015432,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.021729,min_ms=0.021600,max_ms=0.023660,mean_ms=0.022076,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025210,min_ms=0.024030,max_ms=0.041209,mean_ms=0.030916,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.041311,min_ms=0.040729,max_ms=0.048840,mean_ms=0.042654,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.051689,min_ms=0.048151,max_ms=0.083769,mean_ms=0.061884,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.063180,min_ms=0.062511,max_ms=0.068951,mean_ms=0.063977,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.122820,min_ms=0.097171,max_ms=0.173251,mean_ms=0.132772,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.146129,min_ms=0.144460,max_ms=0.165990,mean_ms=0.149733,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.315309,min_ms=0.274400,max_ms=0.344571,mean_ms=0.312974,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.269540,min_ms=0.230891,max_ms=0.364529,mean_ms=0.284061,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.678390,min_ms=0.665380,max_ms=0.691790,mean_ms=0.677474,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.216760,min_ms=1.195899,max_ms=1.245770,mean_ms=1.215663,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.409280,min_ms=1.402890,max_ms=1.414900,mean_ms=1.409656,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.518960,min_ms=1.506460,max_ms=1.531420,mean_ms=1.518207,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.936220,min_ms=2.932600,max_ms=3.138260,mean_ms=2.976232,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=5.818170,min_ms=5.806890,max_ms=5.840529,mean_ms=5.821620,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.028240,min_ms=6.011870,max_ms=6.367850,mean_ms=6.091764,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=15.323769,min_ms=15.155959,max_ms=15.384839,mean_ms=15.284462,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.570929,min_ms=12.566160,max_ms=12.609759,mean_ms=12.581477,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=18.343009,min_ms=18.286879,max_ms=18.563498,mean_ms=18.397222,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.665189,min_ms=28.637018,max_ms=30.080958,mean_ms=28.943594,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=7 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=41.423168,min_ms=39.851428,max_ms=42.202458,mean_ms=41.312086,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=69.307036,min_ms=66.029607,max_ms=73.032585,mean_ms=69.306544,seed=15891659241074909709,offset=1153729718066873136,seed_index=7,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.007400,min_ms=0.007389,max_ms=0.008011,mean_ms=0.007502,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006120,min_ms=0.005840,max_ms=0.010429,mean_ms=0.007654,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.020860,min_ms=0.020429,max_ms=0.034460,mean_ms=0.023017,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.031671,min_ms=0.029980,max_ms=0.051669,mean_ms=0.038546,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.078971,min_ms=0.078330,max_ms=0.090530,mean_ms=0.080787,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.065100,min_ms=0.060890,max_ms=0.104840,mean_ms=0.078648,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.068070,min_ms=0.067790,max_ms=0.072720,mean_ms=0.069249,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.131720,min_ms=0.120400,max_ms=0.209870,mean_ms=0.157424,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.232350,min_ms=0.230790,max_ms=0.243450,mean_ms=0.235489,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.301320,min_ms=0.245120,max_ms=0.424120,mean_ms=0.328876,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.404910,min_ms=0.395710,max_ms=0.440710,mean_ms=0.412067,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.733609,min_ms=0.639750,max_ms=0.775729,mean_ms=0.717890,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.530440,min_ms=0.514790,max_ms=0.708650,mean_ms=0.568230,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=1.525080,min_ms=1.506420,max_ms=1.552980,mean_ms=1.531080,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=3.218860,min_ms=3.185790,max_ms=3.254080,mean_ms=3.219446,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=3.180360,min_ms=3.167190,max_ms=3.200730,mean_ms=3.184932,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=4.454540,min_ms=4.441030,max_ms=4.457580,mean_ms=4.451253,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.270540,min_ms=2.930140,max_ms=6.632159,mean_ms=4.478770,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=5.543950,min_ms=5.527629,max_ms=5.560860,mean_ms=5.543524,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.007810,min_ms=5.997770,max_ms=6.021869,mean_ms=6.008124,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.312629,min_ms=7.275809,max_ms=7.401450,mean_ms=7.326838,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.520599,min_ms=12.506039,max_ms=12.648030,mean_ms=12.542083,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=20.502479,min_ms=20.377338,max_ms=20.673189,mean_ms=20.488507,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.782429,min_ms=28.713439,max_ms=29.800308,mean_ms=29.063773,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=8 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=31.447768,min_ms=31.072308,max_ms=31.832519,mean_ms=31.463673,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=68.422796,min_ms=67.109607,max_ms=76.885375,mean_ms=70.315090,seed=15822324353984026266,offset=2237529514803446473,seed_index=8,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.003520,min_ms=0.003500,max_ms=0.004040,mean_ms=0.003593,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006400,min_ms=0.005940,max_ms=0.018900,mean_ms=0.009526,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.019760,min_ms=0.019680,max_ms=0.020769,mean_ms=0.019934,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012820,min_ms=0.012120,max_ms=0.020749,mean_ms=0.015546,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.027420,min_ms=0.026929,max_ms=0.032049,mean_ms=0.028487,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025760,min_ms=0.024511,max_ms=0.042080,mean_ms=0.031600,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.028240,min_ms=0.026349,max_ms=0.030100,mean_ms=0.027885,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053880,min_ms=0.048860,max_ms=0.084200,mean_ms=0.063676,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.061220,min_ms=0.061040,max_ms=0.084220,mean_ms=0.065077,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.117489,min_ms=0.097109,max_ms=0.168360,mean_ms=0.130080,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.128000,min_ms=0.116960,max_ms=0.184770,mean_ms=0.144932,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.315660,min_ms=0.276929,max_ms=0.338091,mean_ms=0.312284,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.308191,min_ms=0.247080,max_ms=0.385040,mean_ms=0.311162,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.680360,min_ms=0.669910,max_ms=0.689340,mean_ms=0.678856,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.115980,min_ms=1.091250,max_ms=1.126700,mean_ms=1.114323,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.475779,min_ms=1.469720,max_ms=1.481710,mean_ms=1.476142,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.640010,min_ms=1.634600,max_ms=1.650530,mean_ms=1.641343,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.944100,min_ms=2.935669,max_ms=2.947780,mean_ms=2.943316,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=4.340340,min_ms=4.316530,max_ms=4.357319,mean_ms=4.339209,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.007589,min_ms=6.001490,max_ms=6.016370,mean_ms=6.008680,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=9.259550,min_ms=9.235480,max_ms=9.299739,mean_ms=9.260581,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.600679,min_ms=12.595299,max_ms=12.767529,mean_ms=12.647157,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=17.897949,min_ms=17.862249,max_ms=18.087069,mean_ms=17.924571,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.720118,min_ms=28.628368,max_ms=28.800948,mean_ms=28.717596,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=9 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=49.976807,min_ms=48.873227,max_ms=50.150597,mean_ms=49.729766,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.700816,min_ms=66.498826,max_ms=77.896686,mean_ms=69.811308,seed=11579479035314885286,offset=10581520858827646633,seed_index=9,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.004520,min_ms=0.004470,max_ms=0.004960,mean_ms=0.004593,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006360,min_ms=0.006070,max_ms=0.010380,mean_ms=0.007760,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.014660,min_ms=0.014640,max_ms=0.015529,mean_ms=0.014823,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012740,min_ms=0.012100,max_ms=0.020829,mean_ms=0.015584,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.029400,min_ms=0.029200,max_ms=0.031069,mean_ms=0.029823,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025520,min_ms=0.024360,max_ms=0.042449,mean_ms=0.030964,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.058620,min_ms=0.058420,max_ms=0.066410,mean_ms=0.060291,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053760,min_ms=0.048280,max_ms=0.084660,mean_ms=0.063502,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.061350,min_ms=0.060990,max_ms=0.092940,mean_ms=0.066513,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.129020,min_ms=0.097310,max_ms=0.170320,mean_ms=0.133110,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.172450,min_ms=0.169790,max_ms=0.184910,mean_ms=0.173760,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.321020,min_ms=0.280100,max_ms=0.344870,mean_ms=0.316538,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.497660,min_ms=0.476179,max_ms=0.568650,mean_ms=0.507446,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.680129,min_ms=0.665550,max_ms=0.688749,mean_ms=0.677662,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.296910,min_ms=1.294010,max_ms=1.310560,mean_ms=1.299980,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.411619,min_ms=1.406370,max_ms=1.417130,mean_ms=1.411044,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.898450,min_ms=1.888810,max_ms=1.923019,mean_ms=1.900775,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.938120,min_ms=2.934699,max_ms=2.943540,mean_ms=2.939424,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=5.335869,min_ms=5.318099,max_ms=5.339580,mean_ms=5.331627,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.005479,min_ms=5.996160,max_ms=6.009020,mean_ms=6.004446,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.275370,min_ms=7.235130,max_ms=7.357819,mean_ms=7.279435,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.540390,min_ms=12.527019,max_ms=12.773790,mean_ms=12.583681,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=15.825799,min_ms=15.770799,max_ms=16.128229,mean_ms=15.874248,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.749419,min_ms=28.633708,max_ms=28.791788,mean_ms=28.730120,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=10 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=43.611117,min_ms=43.279138,max_ms=45.027797,mean_ms=43.895959,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.215906,min_ms=66.160416,max_ms=70.466965,mean_ms=67.587574,seed=12353903704890448599,offset=1483036387216384866,seed_index=10,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.004090,min_ms=0.004060,max_ms=0.004550,mean_ms=0.004160,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006600,min_ms=0.006230,max_ms=0.010710,mean_ms=0.007992,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.030571,min_ms=0.030540,max_ms=0.031769,mean_ms=0.030754,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.015100,min_ms=0.014560,max_ms=0.024740,mean_ms=0.018508,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.027829,min_ms=0.027791,max_ms=0.029040,mean_ms=0.028024,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.058180,min_ms=0.035011,max_ms=0.091820,mean_ms=0.056048,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.038289,min_ms=0.038120,max_ms=0.041549,mean_ms=0.039005,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.084680,min_ms=0.052420,max_ms=0.096560,mean_ms=0.076470,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.177160,min_ms=0.174500,max_ms=0.203040,mean_ms=0.181362,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.129300,min_ms=0.097520,max_ms=0.168409,mean_ms=0.132380,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.180029,min_ms=0.179460,max_ms=0.194140,mean_ms=0.182980,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.325530,min_ms=0.279940,max_ms=0.341720,mean_ms=0.315998,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.475760,min_ms=0.441640,max_ms=0.570320,mean_ms=0.487989,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.674750,min_ms=0.665220,max_ms=0.691400,mean_ms=0.676112,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.105710,min_ms=1.098571,max_ms=1.132550,mean_ms=1.110152,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.406270,min_ms=1.398040,max_ms=1.417400,mean_ms=1.406476,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=1.670620,min_ms=1.665179,max_ms=1.684771,mean_ms=1.673311,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.941860,min_ms=2.939900,max_ms=2.950410,mean_ms=2.943258,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.369780,min_ms=3.360539,max_ms=3.388269,mean_ms=3.371324,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.043699,min_ms=6.030010,max_ms=6.093209,mean_ms=6.051806,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=10.594549,min_ms=10.575540,max_ms=10.904599,mean_ms=10.648534,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.577059,min_ms=12.569669,max_ms=12.724280,mean_ms=12.606635,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=14.313070,min_ms=14.263949,max_ms=14.521849,mean_ms=14.338102,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.815188,min_ms=28.776228,max_ms=28.952688,mean_ms=28.831340,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=11 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=44.944598,min_ms=44.608407,max_ms=46.877177,mean_ms=45.345220,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.358336,min_ms=66.772966,max_ms=67.933376,mean_ms=67.419304,seed=3380627499038836606,offset=4968728225037113093,seed_index=11,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.011830,min_ms=0.011640,max_ms=0.012210,mean_ms=0.011856,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006530,min_ms=0.006200,max_ms=0.010480,mean_ms=0.007882,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.012610,min_ms=0.012520,max_ms=0.013490,mean_ms=0.012756,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012540,min_ms=0.012030,max_ms=0.020650,mean_ms=0.015430,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.029920,min_ms=0.029780,max_ms=0.032100,mean_ms=0.030406,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.031090,min_ms=0.029500,max_ms=0.049920,mean_ms=0.037670,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.085580,min_ms=0.085160,max_ms=0.089750,mean_ms=0.086686,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.123270,min_ms=0.109470,max_ms=0.190160,mean_ms=0.143896,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.170950,min_ms=0.167430,max_ms=0.203580,mean_ms=0.175281,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.258470,min_ms=0.202920,max_ms=0.359110,mean_ms=0.276846,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.242600,min_ms=0.241040,max_ms=0.277240,mean_ms=0.250310,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.739670,min_ms=0.658650,max_ms=0.775420,mean_ms=0.726266,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.360210,min_ms=0.298340,max_ms=0.454350,mean_ms=0.368093,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.717190,min_ms=0.695500,max_ms=0.738540,mean_ms=0.717378,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.939049,min_ms=1.702720,max_ms=2.262000,mean_ms=1.971940,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.405591,min_ms=1.402679,max_ms=1.430920,mean_ms=1.412716,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=2.026690,min_ms=2.021390,max_ms=2.045500,mean_ms=2.030277,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.933079,min_ms=2.922440,max_ms=2.940050,mean_ms=2.931662,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.266130,min_ms=3.258860,max_ms=3.343350,mean_ms=3.276764,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.019350,min_ms=6.008160,max_ms=6.033199,mean_ms=6.018876,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=6.739160,min_ms=6.713629,max_ms=6.831930,mean_ms=6.747268,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.580719,min_ms=12.559769,max_ms=12.593110,mean_ms=12.579507,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=15.517009,min_ms=15.449709,max_ms=15.630389,mean_ms=15.533082,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.935238,min_ms=28.825268,max_ms=29.003778,mean_ms=28.936244,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=12 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=47.454977,min_ms=47.087677,max_ms=49.848507,mean_ms=47.815067,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=66.900756,min_ms=66.841056,max_ms=68.412146,mean_ms=67.238592,seed=10732231271750015663,offset=17402297285804802249,seed_index=12,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.006109,min_ms=0.006100,max_ms=0.006580,mean_ms=0.006178,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006891,min_ms=0.006520,max_ms=0.011200,mean_ms=0.008368,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.012320,min_ms=0.012271,max_ms=0.013080,mean_ms=0.012446,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012800,min_ms=0.012320,max_ms=0.020400,mean_ms=0.015564,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.015840,min_ms=0.015610,max_ms=0.017550,mean_ms=0.016131,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.026300,min_ms=0.024790,max_ms=0.042620,mean_ms=0.031998,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.033429,min_ms=0.033129,max_ms=0.035929,mean_ms=0.033963,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.054980,min_ms=0.049951,max_ms=0.095369,mean_ms=0.066908,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.096390,min_ms=0.095910,max_ms=0.125220,mean_ms=0.101263,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.143270,min_ms=0.112680,max_ms=0.193290,mean_ms=0.151748,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.325640,min_ms=0.316090,max_ms=0.447150,mean_ms=0.362980,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.862440,min_ms=0.750210,max_ms=0.927180,mean_ms=0.848432,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.774260,min_ms=0.750740,max_ms=0.993570,mean_ms=0.814094,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=1.726500,min_ms=1.719700,max_ms=1.850610,mean_ms=1.751134,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=2.865550,min_ms=2.732679,max_ms=2.981780,mean_ms=2.866508,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=3.515770,min_ms=3.337540,max_ms=3.722459,mean_ms=3.534050,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=4.611300,min_ms=4.594460,max_ms=4.642449,mean_ms=4.610233,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=2.936340,min_ms=2.927560,max_ms=6.621569,mean_ms=4.348788,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.658579,min_ms=3.630340,max_ms=3.753670,mean_ms=3.667760,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.004529,min_ms=6.000570,max_ms=6.013649,mean_ms=6.005716,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.477970,min_ms=7.449829,max_ms=7.548929,mean_ms=7.481595,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.547140,min_ms=12.508320,max_ms=12.595679,mean_ms=12.549407,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=20.914278,min_ms=20.791369,max_ms=21.047779,mean_ms=20.902979,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.752538,min_ms=28.683579,max_ms=28.785408,mean_ms=28.743538,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=13 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=32.103809,min_ms=32.052978,max_ms=33.926729,mean_ms=32.414517,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=66.174816,min_ms=66.141966,max_ms=67.960406,mean_ms=66.639474,seed=1133370055713099201,offset=12046498118689759338,seed_index=13,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.003950,min_ms=0.003920,max_ms=0.004530,mean_ms=0.004041,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006280,min_ms=0.006010,max_ms=0.010530,mean_ms=0.007744,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.006520,min_ms=0.006500,max_ms=0.007130,mean_ms=0.006617,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.012640,min_ms=0.012000,max_ms=0.020220,mean_ms=0.015306,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.016630,min_ms=0.016530,max_ms=0.017330,mean_ms=0.016711,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.037380,min_ms=0.024000,max_ms=0.041470,mean_ms=0.033664,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.039830,min_ms=0.039570,max_ms=0.046220,mean_ms=0.041200,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053580,min_ms=0.048540,max_ms=0.083470,mean_ms=0.063226,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.056610,min_ms=0.056190,max_ms=0.066310,mean_ms=0.058550,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.117990,min_ms=0.097590,max_ms=0.169980,mean_ms=0.129802,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.141160,min_ms=0.139470,max_ms=0.154480,mean_ms=0.143939,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.320860,min_ms=0.282200,max_ms=0.343980,mean_ms=0.317490,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.701110,min_ms=0.686170,max_ms=0.766330,mean_ms=0.711880,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.672120,min_ms=0.666890,max_ms=0.689440,mean_ms=0.676874,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.712880,min_ms=1.561730,max_ms=1.799870,mean_ms=1.693134,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.415119,min_ms=1.403331,max_ms=1.459070,mean_ms=1.424154,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=2.041320,min_ms=2.025960,max_ms=2.050449,mean_ms=2.039770,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.022980,min_ms=2.948009,max_ms=3.164520,mean_ms=3.036884,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.985320,min_ms=3.874600,max_ms=4.638960,mean_ms=4.089128,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.280369,min_ms=6.153760,max_ms=7.190650,mean_ms=6.528988,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=7.266910,min_ms=7.244790,max_ms=7.349109,mean_ms=7.276391,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.544469,min_ms=12.529309,max_ms=12.623159,mean_ms=12.558873,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=24.476038,min_ms=24.295218,max_ms=24.776009,mean_ms=24.516311,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.690678,min_ms=28.669508,max_ms=28.729548,mean_ms=28.693808,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=14 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=35.233458,min_ms=34.484867,max_ms=35.388287,mean_ms=34.969869,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=66.682666,min_ms=66.406376,max_ms=66.689266,mean_ms=66.595586,seed=3538780091478534184,offset=3165205651432927349,seed_index=14,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=512 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,512,0.000000,median_ms=0.005930,min_ms=0.005900,max_ms=0.006410,mean_ms=0.005996,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,512,0.000000,median_ms=0.006590,min_ms=0.006150,max_ms=0.010910,mean_ms=0.008034,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1024 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,1024,0.000000,median_ms=0.008190,min_ms=0.008180,max_ms=0.008930,mean_ms=0.008304,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1024,0.000000,median_ms=0.013770,min_ms=0.013130,max_ms=0.022730,mean_ms=0.016946,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2048 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,2048,0.000000,median_ms=0.020400,min_ms=0.020300,max_ms=0.022670,mean_ms=0.020839,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2048,0.000000,median_ms=0.025250,min_ms=0.024090,max_ms=0.042160,mean_ms=0.030744,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=4096 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,4096,0.000000,median_ms=0.030280,min_ms=0.030150,max_ms=0.032110,mean_ms=0.030797,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,4096,0.000000,median_ms=0.053600,min_ms=0.048300,max_ms=0.088860,mean_ms=0.064958,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=8192 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,8192,0.000000,median_ms=0.071240,min_ms=0.070900,max_ms=0.075530,mean_ms=0.072173,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,8192,0.000000,median_ms=0.123500,min_ms=0.098410,max_ms=0.172480,mean_ms=0.133136,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=16384 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,16384,0.000000,median_ms=0.238970,min_ms=0.238010,max_ms=0.261530,mean_ms=0.243037,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,16384,0.000000,median_ms=0.323260,min_ms=0.283370,max_ms=0.346010,mean_ms=0.319788,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=32768 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,32768,0.000000,median_ms=0.443770,min_ms=0.411600,max_ms=0.512910,mean_ms=0.453494,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,32768,0.000000,median_ms=0.688090,min_ms=0.675590,max_ms=0.695210,mean_ms=0.686104,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=65536 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,65536,0.000000,median_ms=1.347029,min_ms=1.339440,max_ms=1.369729,mean_ms=1.350663,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,65536,0.000000,median_ms=1.417640,min_ms=1.404790,max_ms=1.425240,mean_ms=1.415840,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=131072 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,131072,0.000000,median_ms=2.580840,min_ms=2.480640,max_ms=2.804150,mean_ms=2.621454,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,131072,0.000000,median_ms=3.020990,min_ms=3.013970,max_ms=3.035110,mean_ms=3.023488,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=262144 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,262144,0.000000,median_ms=3.315050,min_ms=3.280139,max_ms=3.422030,mean_ms=3.325590,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,262144,0.000000,median_ms=6.258460,min_ms=6.107539,max_ms=7.111339,mean_ms=6.439681,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=524288 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,524288,0.000000,median_ms=11.395610,min_ms=11.382680,max_ms=15.521019,mean_ms=12.412429,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,524288,0.000000,median_ms=12.531060,min_ms=12.520699,max_ms=12.571969,mean_ms=12.537253,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=1048576 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,1048576,0.000000,median_ms=14.712559,min_ms=14.656689,max_ms=14.797589,mean_ms=14.725146,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,1048576,0.000000,median_ms=28.480708,min_ms=28.464769,max_ms=28.650318,mean_ms=28.512956,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> auto n=2097152 gamma_base=1.5 auto_shape=piecewise seed_index=15 key_mode=multiplicative
+summary,better-mphf-auto,build,2097152,0.000000,median_ms=31.289459,min_ms=30.781079,max_ms=32.252148,mean_ms=31.402344,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+summary,better-mphf-auto,lookup,2097152,0.000000,median_ms=67.132286,min_ms=66.876816,max_ms=68.022656,mean_ms=67.311404,seed=12697299722149125515,offset=16381852310217306666,seed_index=15,key_mode=multiplicative,fastrange_mode=mul64
+==> finished csv=/u/devanshu/better-leveledmphf/bench-results/serial-auto.csv log=/u/devanshu/better-leveledmphf/bench-results/serial-auto.log

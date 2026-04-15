@@ -1,7 +1,8 @@
 [package]
 name = "mphf-benchmarks"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
-better-mphf = { path = "..", features = ["parallel"] }
+better-mphf = { path = ".." }
+boomphf = { version = "0.6", default-features = false }
