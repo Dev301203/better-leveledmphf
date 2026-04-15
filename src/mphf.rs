@@ -38,10 +38,27 @@ pub enum BuildError {
     DuplicateKey { key: u64 },
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum AutoGammaShape {
+    Pow05,
+    Pow10,
+    Pow15,
+    Piecewise,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FastRangeMode {
+    Low32,
+    High32,
+    Mul64,
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct BuildOptions {
     expansion_factor: Option<f64>,
     auto_tuned_gamma_base: f64,
+    auto_tuned_gamma_shape: AutoGammaShape,
+    fastrange_mode: FastRangeMode,
     par_threshold: usize,
 }
 
@@ -51,6 +68,8 @@ impl Default for BuildOptions {
         Self {
             expansion_factor: None,
             auto_tuned_gamma_base: AUTO_TUNED_GAMMA_BASE,
+            auto_tuned_gamma_shape: AutoGammaShape::Pow10,
+            fastrange_mode: FastRangeMode::Low32,
             par_threshold: PAR_THRESHOLD,
         }
     }
@@ -72,6 +91,16 @@ impl BuildOptions {
         self
     }
 
+    pub fn auto_tuned_gamma_shape(mut self, shape: AutoGammaShape) -> Self {
+        self.auto_tuned_gamma_shape = shape;
+        self
+    }
+
+    pub fn fastrange_mode(mut self, mode: FastRangeMode) -> Self {
+        self.fastrange_mode = mode;
+        self
+    }
+
     pub fn par_threshold(mut self, par_threshold: usize) -> Self {
         self.par_threshold = par_threshold;
         self
@@ -80,19 +109,60 @@ impl BuildOptions {
 
 pub struct LeveledMphf {
     splitmix: SplitMix64,
+    fastrange_mode: FastRangeMode,
     level_meta: Vec<LevelMeta>,
     bitsets: Vec<RankedBitSet>,
 }
 
 #[inline(always)]
-fn fastrange(hash: u64, n: usize) -> usize {
-    if n <= u32::MAX as usize {
-        // Fast path for common scales
-        // Uses the lower 32 bits of a 64-bit hash
-        ((((hash as u32) as u64) * (n as u32 as u64)) >> 32) as usize
-    } else {
-        // Fallback that preserves support for larger slot counts
-        ((hash as u128 * n as u128) >> 64) as usize
+fn fastrange_mul64(hash: u64, n: usize) -> usize {
+    ((hash as u128 * n as u128) >> 64) as usize
+}
+
+#[inline(always)]
+fn fastrange(hash: u64, n: usize, mode: FastRangeMode) -> usize {
+    match mode {
+        FastRangeMode::Low32 => {
+            if n <= u32::MAX as usize {
+                ((((hash as u32) as u64) * (n as u32 as u64)) >> 32) as usize
+            } else {
+                fastrange_mul64(hash, n)
+            }
+        }
+        FastRangeMode::High32 => {
+            if n <= u32::MAX as usize {
+                (((((hash >> 32) as u32) as u64) * (n as u32 as u64)) >> 32) as usize
+            } else {
+                fastrange_mul64(hash, n)
+            }
+        }
+        FastRangeMode::Mul64 => fastrange_mul64(hash, n),
+    }
+}
+
+#[inline(always)]
+fn round_slots(raw_slots: usize) -> usize {
+    raw_slots.div_ceil(CACHE_LINE_BITS) * CACHE_LINE_BITS
+}
+
+#[inline(always)]
+fn auto_gamma(gamma_base: f64, ratio: f64, shape: AutoGammaShape) -> f64 {
+    let ratio = ratio.clamp(0.0, 1.0);
+    match shape {
+        AutoGammaShape::Pow05 => gamma_base * (1.0 + ratio.sqrt()),
+        AutoGammaShape::Pow10 => gamma_base * (1.0 + ratio),
+        AutoGammaShape::Pow15 => gamma_base * (1.0 + ratio * ratio.sqrt()),
+        AutoGammaShape::Piecewise => {
+            if ratio >= 0.75 {
+                gamma_base * 2.0
+            } else if ratio >= 0.5 {
+                gamma_base * 1.8
+            } else if ratio >= 0.25 {
+                gamma_base * 1.55
+            } else {
+                gamma_base * 1.35
+            }
+        }
     }
 }
 
@@ -105,6 +175,7 @@ fn seq_count_pass(
     num_slots: usize,
     retry_seed: u64,
     splitmix: &SplitMix64,
+    fastrange_mode: FastRangeMode,
 ) -> usize {
     // counting pass
     // sequential path uses seq_counts and caches bucket ids so accepted attempts do not rehash
@@ -115,7 +186,11 @@ fn seq_count_pass(
     );
     seq_counts.fill(0);
     for (bucket_id, &k) in bucket_ids.iter_mut().zip(remaining_keys.iter()) {
-        let bit_idx = fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
+        let bit_idx = fastrange(
+            splitmix.hash_with_retry_seed(k, retry_seed),
+            num_slots,
+            fastrange_mode,
+        );
         *bucket_id = bit_idx as u32;
         seq_counts[bit_idx] = seq_counts[bit_idx].saturating_add(1);
     }
@@ -167,6 +242,7 @@ fn par_count_pass(
     num_slots: usize,
     retry_seed: u64,
     splitmix: &SplitMix64,
+    fastrange_mode: FastRangeMode,
 ) -> (usize, Vec<u8>) {
     // counting pass
     // each worker fills its thread-local buffer, clones out for tree reduce.
@@ -179,7 +255,11 @@ fn par_count_pass(
                 buf.fill(0);
                 for &k in chunk {
                     let bit_idx =
-                        fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
+                        fastrange(
+                            splitmix.hash_with_retry_seed(k, retry_seed),
+                            num_slots,
+                            fastrange_mode,
+                        );
                     buf[bit_idx] = buf[bit_idx].saturating_add(1);
                 }
                 buf.clone()
@@ -212,6 +292,7 @@ fn par_classify_pass(
     retry_seed: u64,
     splitmix: &SplitMix64,
     counts: &[u8],
+    fastrange_mode: FastRangeMode,
 ) -> (Vec<u64>, BitSet) {
     let mut bs = BitSet::new(num_slots);
     let (placed_chunks, survivor_chunks): (Vec<Vec<usize>>, Vec<Vec<u64>>) = remaining_keys
@@ -220,7 +301,11 @@ fn par_classify_pass(
             let mut placed = Vec::new();
             let mut survivors = Vec::new();
             for &k in chunk {
-                let bit_idx = fastrange(splitmix.hash_with_retry_seed(k, retry_seed), num_slots);
+                let bit_idx = fastrange(
+                    splitmix.hash_with_retry_seed(k, retry_seed),
+                    num_slots,
+                    fastrange_mode,
+                );
                 if counts[bit_idx] == 1 {
                     placed.push(bit_idx);
                 } else {
@@ -287,7 +372,7 @@ impl LeveledMphf {
         // reuse it every iteration by zeroing only the [..num_slots] prefix
         let max_slots = {
             let expanded = (size as f64 * buffer_gamma).max(1.0) as usize;
-            ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS
+            round_slots(expanded)
         };
         let mut seq_counts = vec![0u8; max_slots];
         let mut seq_bucket_ids = vec![0u32; size];
@@ -298,13 +383,13 @@ impl LeveledMphf {
                 Some(g) => g,
                 None => {
                     let ratio = n as f64 / size as f64;
-                    gamma_base * (1.0 + ratio)
+                    auto_gamma(gamma_base, ratio, options.auto_tuned_gamma_shape)
                 }
             };
             // oversize to a cache-line-aligned slot count
             // also eliminates the tail edge case for small remaining sets
             let expanded = (n as f64 * gamma).max(1.0) as usize;
-            let num_slots = ((expanded + CACHE_LINE_BITS - 1) / CACHE_LINE_BITS) * CACHE_LINE_BITS;
+            let num_slots = round_slots(expanded);
 
             // poisson-approximated expected unique count: E[unique] = n * e^(-load)
             let load = n as f64 / num_slots as f64;
@@ -342,6 +427,7 @@ impl LeveledMphf {
                             num_slots,
                             retry_seed,
                             &splitmix,
+                            options.fastrange_mode,
                         );
                         // reject if the hash performed worse than the poisson expectation
                         if (unique_count as f64) < expected_unique {
@@ -357,6 +443,7 @@ impl LeveledMphf {
                             retry_seed,
                             &splitmix,
                             &counts,
+                            options.fastrange_mode,
                         );
 
                         level_meta.push(LevelMeta {
@@ -384,6 +471,7 @@ impl LeveledMphf {
                         num_slots,
                         retry_seed,
                         &splitmix,
+                        options.fastrange_mode,
                     );
                     // reject if the hash performed worse than the poisson expectation
                     if (unique_count as f64) < expected_unique {
@@ -414,6 +502,7 @@ impl LeveledMphf {
 
         Self {
             splitmix,
+            fastrange_mode: options.fastrange_mode,
             level_meta,
             bitsets,
         }
@@ -427,7 +516,7 @@ impl LeveledMphf {
         // SAFETY: level_meta and bitsets are non-empty
         let meta0 = unsafe { self.level_meta.get_unchecked(0) };
         let hash = self.splitmix.hash_with_retry_seed(key, meta0.retry_seed);
-        let bit_idx = fastrange(hash, meta0.num_slots);
+        let bit_idx = fastrange(hash, meta0.num_slots, self.fastrange_mode);
         if let Some(rank) = unsafe { self.bitsets.get_unchecked(0) }.rank_if_set(bit_idx) {
             return rank;
         }
@@ -435,7 +524,7 @@ impl LeveledMphf {
         for level in 1..self.level_meta.len() {
             let meta = &self.level_meta[level];
             let hash = self.splitmix.hash_with_retry_seed(key, meta.retry_seed);
-            let bit_idx = fastrange(hash, meta.num_slots);
+            let bit_idx = fastrange(hash, meta.num_slots, self.fastrange_mode);
             // SAFETY: bitsets.len() == level_meta.len(), and level < level_meta.len()
             if let Some(rank) = unsafe { self.bitsets.get_unchecked(level) }.rank_if_set(bit_idx) {
                 return meta.cumulative_rank + rank;
@@ -467,7 +556,7 @@ impl LeveledMphf {
         )
     }
 
-    // like [`new`](Self::new) but with front-loaded adaptive γ per level: γ = AUTO_TUNED_GAMMA_BASE * (1 + n_remaining/n_original).
+    // like [`new`](Self::new) but with adaptive γ per level controlled by BuildOptions::auto_tuned_gamma_shape.
     pub fn new_auto_tuned(keys: &[u64], seed: u64, offset: u64) -> Self {
         Self::build_unchecked(keys, seed, offset, BuildOptions::default().auto_tuned())
     }
