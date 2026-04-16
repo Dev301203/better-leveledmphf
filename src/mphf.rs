@@ -534,6 +534,14 @@ impl LeveledMphf {
         panic!("key {} does not exist", key);
     }
 
+    pub fn storage_bits(&self) -> usize {
+        let self_bytes = std::mem::size_of::<Self>();
+        let level_meta_bytes = self.level_meta.capacity() * std::mem::size_of::<LevelMeta>();
+        let bitset_shell_bytes = self.bitsets.capacity() * std::mem::size_of::<RankedBitSet>();
+        let bitset_heap_bytes: usize = self.bitsets.iter().map(RankedBitSet::storage_bytes).sum();
+        (self_bytes + level_meta_bytes + bitset_shell_bytes + bitset_heap_bytes) * 8
+    }
+
     pub fn level_stats(&self) -> Vec<LevelStats> {
         self.level_meta
             .iter()

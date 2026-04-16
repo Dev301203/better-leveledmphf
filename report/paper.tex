@@ -118,17 +118,20 @@ This makes auto a strong default when the goal is good lookup performance withou
 \end{figure}
 \FloatBarrier
 
-\subsection{Per-Gamma View and Workload Sensitivity}
+\subsection{Per-Gamma View}
 Figure~\ref{fig:gamma-grid} shows the fixed-gamma results in more detail. \texttt{better-mphf} performs best for medium to large $n$ values, especially in lookup. The weakest cells are concentrated at very small sizes.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=\linewidth]{figures/gamma_grid_serial.png}
+\makebox[\linewidth][c]{%
+    \includegraphics[width=1.08\linewidth]{figures/gamma_grid_serial.png}%
+}
 \caption{Per-gamma fairness plots from the \PaperSeedCount{}-seed benchmark.}
 \label{fig:gamma-grid}
 \end{figure}
 \FloatBarrier
 
+\subsection{Workload Sensitivity}
 The fast-range comparison shows a clear pattern in the current data. In the \PaperCollapsedCellCount{}-cell view, build winners split \PaperFastRangeBuildMulSixtyFourWins/\PaperFastRangeBuildLowThirtyTwoWins/\PaperFastRangeBuildHighThirtyTwoWins{} among \texttt{mul64}/\texttt{low32}/\texttt{high32}, and lookup winners split \PaperFastRangeLookupMulSixtyFourWins/\PaperFastRangeLookupLowThirtyTwoWins/\PaperFastRangeLookupHighThirtyTwoWins{} among \texttt{mul64}/\texttt{low32}/\texttt{high32}. Relative to \texttt{low32}, \texttt{mul64} improves median build time by \PaperFastRangeMulSixtyFourBuildImprovePct\% and median lookup time by \PaperFastRangeMulSixtyFourLookupImprovePct\%, while \texttt{high32} improves build by \PaperFastRangeHighThirtyTwoBuildImprovePct\% but hurts lookup by \PaperFastRangeHighThirtyTwoLookupPenaltyPct\%. In this comparison, \texttt{mul64} is the strongest overall mode.
 
 The key-distribution comparison tells a similar story. Lookup is very stable across tested modes: relative to multiplicative keys, the median lookup change stayed within about $\pm \PaperKeyLookupBoundPct\%$ for sequential, clustered, high-bit-heavy, and splitmix-random keys. Build is more workload-sensitive, and every tested alternative distribution was slower than multiplicative keys, with median slowdowns from \PaperKeyBuildShiftMinPct\% to \PaperKeyBuildShiftMaxPct\%. No distribution produced a failure mode.
@@ -148,6 +151,41 @@ The key-distribution comparison tells a similar story. Lookup is very stable acr
 \label{fig:tradeoff-panels}
 \end{figure}
 \FloatBarrier
+
+\subsection{Final Structure Size}
+A separate exact-memory benchmark measured final structure size in bits per key for \texttt{better-mphf} and \texttt{bbhash-cpp} over the same $(n,\gamma)$ grid on multiplicative keys with one seed. \texttt{boomphf-rust} is omitted from this exact comparison because the crate does not expose a public in-memory size API. Table~\ref{tab:bits-per-key} reports the exact bits-per-key values for all tested gamma values at representative input sizes.
+
+\begin{table}[!htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{r l c c c c}
+\toprule
+$\gamma$ & impl & \PaperBitsTableNOne{} & \PaperBitsTableNTwo{} & \PaperBitsTableNThree{} & \PaperBitsTableNFour{} \\
+\midrule
+\PaperBitsGammaOneLabel{} & \texttt{better-mphf} & \PaperBitsGammaOneBetterNOne{} & \PaperBitsGammaOneBetterNTwo{} & \PaperBitsGammaOneBetterNThree{} & \PaperBitsGammaOneBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaOneCppNOne{} & \PaperBitsGammaOneCppNTwo{} & \PaperBitsGammaOneCppNThree{} & \PaperBitsGammaOneCppNFour{} \\
+\PaperBitsGammaTwoLabel{} & \texttt{better-mphf} & \PaperBitsGammaTwoBetterNOne{} & \PaperBitsGammaTwoBetterNTwo{} & \PaperBitsGammaTwoBetterNThree{} & \PaperBitsGammaTwoBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaTwoCppNOne{} & \PaperBitsGammaTwoCppNTwo{} & \PaperBitsGammaTwoCppNThree{} & \PaperBitsGammaTwoCppNFour{} \\
+\PaperBitsGammaThreeLabel{} & \texttt{better-mphf} & \PaperBitsGammaThreeBetterNOne{} & \PaperBitsGammaThreeBetterNTwo{} & \PaperBitsGammaThreeBetterNThree{} & \PaperBitsGammaThreeBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaThreeCppNOne{} & \PaperBitsGammaThreeCppNTwo{} & \PaperBitsGammaThreeCppNThree{} & \PaperBitsGammaThreeCppNFour{} \\
+\PaperBitsGammaFourLabel{} & \texttt{better-mphf} & \PaperBitsGammaFourBetterNOne{} & \PaperBitsGammaFourBetterNTwo{} & \PaperBitsGammaFourBetterNThree{} & \PaperBitsGammaFourBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaFourCppNOne{} & \PaperBitsGammaFourCppNTwo{} & \PaperBitsGammaFourCppNThree{} & \PaperBitsGammaFourCppNFour{} \\
+\PaperBitsGammaFiveLabel{} & \texttt{better-mphf} & \PaperBitsGammaFiveBetterNOne{} & \PaperBitsGammaFiveBetterNTwo{} & \PaperBitsGammaFiveBetterNThree{} & \PaperBitsGammaFiveBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaFiveCppNOne{} & \PaperBitsGammaFiveCppNTwo{} & \PaperBitsGammaFiveCppNThree{} & \PaperBitsGammaFiveCppNFour{} \\
+\PaperBitsGammaSixLabel{} & \texttt{better-mphf} & \PaperBitsGammaSixBetterNOne{} & \PaperBitsGammaSixBetterNTwo{} & \PaperBitsGammaSixBetterNThree{} & \PaperBitsGammaSixBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaSixCppNOne{} & \PaperBitsGammaSixCppNTwo{} & \PaperBitsGammaSixCppNThree{} & \PaperBitsGammaSixCppNFour{} \\
+\PaperBitsGammaSevenLabel{} & \texttt{better-mphf} & \PaperBitsGammaSevenBetterNOne{} & \PaperBitsGammaSevenBetterNTwo{} & \PaperBitsGammaSevenBetterNThree{} & \PaperBitsGammaSevenBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaSevenCppNOne{} & \PaperBitsGammaSevenCppNTwo{} & \PaperBitsGammaSevenCppNThree{} & \PaperBitsGammaSevenCppNFour{} \\
+\PaperBitsGammaEightLabel{} & \texttt{better-mphf} & \PaperBitsGammaEightBetterNOne{} & \PaperBitsGammaEightBetterNTwo{} & \PaperBitsGammaEightBetterNThree{} & \PaperBitsGammaEightBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaEightCppNOne{} & \PaperBitsGammaEightCppNTwo{} & \PaperBitsGammaEightCppNThree{} & \PaperBitsGammaEightCppNFour{} \\
+\PaperBitsGammaNineLabel{} & \texttt{better-mphf} & \PaperBitsGammaNineBetterNOne{} & \PaperBitsGammaNineBetterNTwo{} & \PaperBitsGammaNineBetterNThree{} & \PaperBitsGammaNineBetterNFour{} \\
+ & \texttt{bbhash-cpp} & \PaperBitsGammaNineCppNOne{} & \PaperBitsGammaNineCppNTwo{} & \PaperBitsGammaNineCppNThree{} & \PaperBitsGammaNineCppNFour{} \\
+\bottomrule
+\end{tabular}
+\caption{Final structure size in bits per key. Columns are representative input sizes and rows list all tested gamma values for both implementations.}
+\label{tab:bits-per-key}
+\end{table}
 
 \subsection{Seed Robustness}
 Seed sensitivity is the main weakness of the current builder. In the \PaperSeedCount{}-seed benchmark, the worst/best build-time ratio across seeds has a median of $\PaperSeedRatioMedianX\times$ and a maximum of $\PaperSeedRatioMaxX\times$. At $n = \PaperSeedExampleN$, the fixed-gamma benchmark gives representative per-gamma ranges: at $\gamma = \PaperSeedExampleGammaLow$, best/median/worst across \PaperSeedCount{} seeds is \PaperSeedLowBestMs/\PaperSeedLowMedianMs/\PaperSeedLowWorstMs ms; at $\gamma = \PaperSeedExampleGammaHigh$, it is \PaperSeedHighBestMs/\PaperSeedHighMedianMs/\PaperSeedHighWorstMs ms.

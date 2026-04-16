@@ -1,0 +1,597 @@
+==> 2026-04-15T20:18:18-04:00 repo=/u/devanshu/better-leveledmphf
+==> host=cpunode10 warmup=2 timed=7 lookup_timed=5
+==> run_fixed=1 run_auto=0 run_baselines=1 space_only=1
+==> seed_indices=0 key_modes=multiplicative
+==> fixed_gammas=1.15 1.25 1.35 1.5 1.65 1.8 2.0 2.25 2.5 auto_gamma_bases=1.5 auto_shape=fixed-piecewise
+==> fastrange_modes=mul64
+==> estimated_cells better_fixed=117 better_auto=13 baselines=117
+==> fairness note: boomphf-rust and bbhash-cpp expose fixed gamma only; better-mphf auto-gamma is emitted as a separate extra series
+==> Building Rust runners
+    Finished release [optimized + debuginfo] target(s) in 0.06s
+==> Building C++ runner
+==> fixed gamma=1.15 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    7680  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,1.150000,bits=7680,bits_per_key=15.000000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,1.150000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9152  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,1.150000,bits=9152,bits_per_key=8.937500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,1.150000,bits=10816,bits_per_key=10.562500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    12224  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,1.150000,bits=12224,bits_per_key=5.968750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,1.150000,bits=13696,bits_per_key=6.687500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    18368  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,1.150000,bits=18368,bits_per_key=4.484375,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,1.150000,bits=20032,bits_per_key=4.890625,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    30976  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,1.150000,bits=30976,bits_per_key=3.781250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,1.150000,bits=38336,bits_per_key=4.679688,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    56192  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,1.150000,bits=56192,bits_per_key=3.429688,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,1.150000,bits=63104,bits_per_key=3.851562,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    106624  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,1.150000,bits=106624,bits_per_key=3.253906,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,1.150000,bits=113792,bits_per_key=3.472656,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    207744  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,1.150000,bits=207744,bits_per_key=3.169922,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,1.150000,bits=214592,bits_per_key=3.274414,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    410048  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,1.150000,bits=410048,bits_per_key=3.128418,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,1.150000,bits=415040,bits_per_key=3.166504,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    814592  bits (82.79 %)   (array + ranks )
+Last level hash        169344  bits (17.21 %) (nb in last level hash 504)
+summary,bbhash-cpp,space_bits,262144,1.150000,bits=983936,bits_per_key=3.753418,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,1.150000,bits=819968,bits_per_key=3.127930,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1623552  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,1.150000,bits=1623552,bits_per_key=3.096680,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,1.150000,bits=1628096,bits_per_key=3.105347,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3241856  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,1.150000,bits=3241856,bits_per_key=3.091675,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,1.150000,bits=3258496,bits_per_key=3.107544,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.15 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    6478528  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,1.150000,bits=6478528,bits_per_key=3.089203,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,1.150000,bits=6492160,bits_per_key=3.095703,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    7616  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,1.250000,bits=7616,bits_per_key=14.875000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,1.250000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9088  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,1.250000,bits=9088,bits_per_key=8.875000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,1.250000,bits=10816,bits_per_key=10.562500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    12352  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,1.250000,bits=12352,bits_per_key=6.031250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,1.250000,bits=13696,bits_per_key=6.687500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    18816  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,1.250000,bits=18816,bits_per_key=4.593750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,1.250000,bits=20032,bits_per_key=4.890625,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    31488  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,1.250000,bits=31488,bits_per_key=3.843750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,1.250000,bits=32704,bits_per_key=3.992188,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    57024  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,1.250000,bits=57024,bits_per_key=3.480469,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,1.250000,bits=64256,bits_per_key=3.921875,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    108160  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,1.250000,bits=108160,bits_per_key=3.300781,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,1.250000,bits=114944,bits_per_key=3.507812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    210496  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,1.250000,bits=210496,bits_per_key=3.211914,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,1.250000,bits=216896,bits_per_key=3.309570,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    415744  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,1.250000,bits=415744,bits_per_key=3.171875,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,1.250000,bits=420800,bits_per_key=3.210449,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    825792  bits (93.57 %)   (array + ranks )
+Last level hash         56784  bits (6.43 %) (nb in last level hash 169)
+summary,bbhash-cpp,space_bits,262144,1.250000,bits=882576,bits_per_key=3.366760,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,1.250000,bits=832064,bits_per_key=3.174072,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1646080  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,1.250000,bits=1646080,bits_per_key=3.139648,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,1.250000,bits=1648832,bits_per_key=3.144897,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3286976  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,1.250000,bits=3286976,bits_per_key=3.134705,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,1.250000,bits=3292160,bits_per_key=3.139648,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.25 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    6568576  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,1.250000,bits=6568576,bits_per_key=3.132141,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,1.250000,bits=6577984,bits_per_key=3.136627,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    7616  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,1.350000,bits=7616,bits_per_key=14.875000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,1.350000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9216  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,1.350000,bits=9216,bits_per_key=9.000000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,1.350000,bits=10816,bits_per_key=10.562500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    12416  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,1.350000,bits=12416,bits_per_key=6.062500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,1.350000,bits=13696,bits_per_key=6.687500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    18880  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,1.350000,bits=18880,bits_per_key=4.609375,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,1.350000,bits=20032,bits_per_key=4.890625,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    31808  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,1.350000,bits=31808,bits_per_key=3.882812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,1.350000,bits=33856,bits_per_key=4.132812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    57920  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,1.350000,bits=57920,bits_per_key=3.535156,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,1.350000,bits=59200,bits_per_key=3.613281,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    110144  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,1.350000,bits=110144,bits_per_key=3.361328,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,1.350000,bits=116672,bits_per_key=3.560547,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    214464  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,1.350000,bits=214464,bits_per_key=3.272461,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,1.350000,bits=220928,bits_per_key=3.371094,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    423168  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,1.350000,bits=423168,bits_per_key=3.228516,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,1.350000,bits=429440,bits_per_key=3.276367,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    840768  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,1.350000,bits=840768,bits_per_key=3.207275,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,1.350000,bits=846464,bits_per_key=3.229004,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1675520  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,1.350000,bits=1675520,bits_per_key=3.195801,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,1.350000,bits=1679936,bits_per_key=3.204224,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3345728  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,1.350000,bits=3345728,bits_per_key=3.190735,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,1.350000,bits=3348608,bits_per_key=3.193481,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.35 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    6685952  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,1.350000,bits=6685952,bits_per_key=3.188110,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,1.350000,bits=6684800,bits_per_key=3.187561,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    7680  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,1.500000,bits=7680,bits_per_key=15.000000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,1.500000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9344  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,1.500000,bits=9344,bits_per_key=9.125000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,1.500000,bits=10816,bits_per_key=10.562500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    12736  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,1.500000,bits=12736,bits_per_key=6.218750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,1.500000,bits=13696,bits_per_key=6.687500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    19328  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,1.500000,bits=19328,bits_per_key=4.718750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,1.500000,bits=20608,bits_per_key=5.031250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    32768  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,1.500000,bits=32768,bits_per_key=4.000000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,1.500000,bits=33856,bits_per_key=4.132812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    59648  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,1.500000,bits=59648,bits_per_key=3.640625,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,1.500000,bits=60928,bits_per_key=3.718750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    113408  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,1.500000,bits=113408,bits_per_key=3.460938,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,1.500000,bits=120128,bits_per_key=3.666016,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    221056  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,1.500000,bits=221056,bits_per_key=3.373047,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,1.500000,bits=226688,bits_per_key=3.458984,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    436416  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,1.500000,bits=436416,bits_per_key=3.329590,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,1.500000,bits=441536,bits_per_key=3.368652,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    867264  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,1.500000,bits=867264,bits_per_key=3.308350,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,1.500000,bits=873536,bits_per_key=3.332275,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1728960  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,1.500000,bits=1728960,bits_per_key=3.297729,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,1.500000,bits=1735808,bits_per_key=3.310791,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3451968  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,1.500000,bits=3451968,bits_per_key=3.292053,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,1.500000,bits=3454592,bits_per_key=3.294556,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.5 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    6898304  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,1.500000,bits=6898304,bits_per_key=3.289368,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,1.500000,bits=6901952,bits_per_key=3.291107,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    7808  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,1.650000,bits=7808,bits_per_key=15.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,1.650000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9536  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,1.650000,bits=9536,bits_per_key=9.312500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,1.650000,bits=8000,bits_per_key=7.812500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    12928  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,1.650000,bits=12928,bits_per_key=6.312500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,1.650000,bits=14272,bits_per_key=6.968750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    19840  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,1.650000,bits=19840,bits_per_key=4.843750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,1.650000,bits=21184,bits_per_key=5.171875,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    33728  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,1.650000,bits=33728,bits_per_key=4.117188,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,1.650000,bits=35008,bits_per_key=4.273438,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    61696  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,1.650000,bits=61696,bits_per_key=3.765625,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,1.650000,bits=62656,bits_per_key=3.824219,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    117376  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,1.650000,bits=117376,bits_per_key=3.582031,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,1.650000,bits=124736,bits_per_key=3.806641,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    228736  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,1.650000,bits=228736,bits_per_key=3.490234,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,1.650000,bits=235328,bits_per_key=3.590820,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    451776  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,1.650000,bits=451776,bits_per_key=3.446777,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,1.650000,bits=458816,bits_per_key=3.500488,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    897792  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,1.650000,bits=897792,bits_per_key=3.424805,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,1.650000,bits=904064,bits_per_key=3.448730,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1789888  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,1.650000,bits=1789888,bits_per_key=3.413940,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,1.650000,bits=1794560,bits_per_key=3.422852,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3573760  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,1.650000,bits=3573760,bits_per_key=3.408203,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,1.650000,bits=3577280,bits_per_key=3.411560,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.65 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    7141824  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,1.650000,bits=7141824,bits_per_key=3.405487,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,1.650000,bits=7144448,bits_per_key=3.406738,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    7936  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,1.800000,bits=7936,bits_per_key=15.500000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,1.800000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9664  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,1.800000,bits=9664,bits_per_key=9.437500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,1.800000,bits=8000,bits_per_key=7.812500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    13248  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,1.800000,bits=13248,bits_per_key=6.468750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,1.800000,bits=14848,bits_per_key=7.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    20416  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,1.800000,bits=20416,bits_per_key=4.984375,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,1.800000,bits=21760,bits_per_key=5.312500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    34880  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,1.800000,bits=34880,bits_per_key=4.257812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,1.800000,bits=36160,bits_per_key=4.414062,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    63680  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,1.800000,bits=63680,bits_per_key=3.886719,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,1.800000,bits=64960,bits_per_key=3.964844,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    121472  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,1.800000,bits=121472,bits_per_key=3.707031,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,1.800000,bits=123136,bits_per_key=3.757812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    236928  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,1.800000,bits=236928,bits_per_key=3.615234,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,1.800000,bits=243968,bits_per_key=3.722656,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    468288  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,1.800000,bits=468288,bits_per_key=3.572754,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,1.800000,bits=474944,bits_per_key=3.623535,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    930880  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,1.800000,bits=930880,bits_per_key=3.551025,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,1.800000,bits=936896,bits_per_key=3.573975,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1856064  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,1.800000,bits=1856064,bits_per_key=3.540161,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,1.800000,bits=1862528,bits_per_key=3.552490,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3706368  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,1.800000,bits=3706368,bits_per_key=3.534668,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,1.800000,bits=3710336,bits_per_key=3.538452,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=1.8 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    7407104  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,1.800000,bits=7407104,bits_per_key=3.531982,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,1.800000,bits=7411136,bits_per_key=3.533905,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    8000  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,2.000000,bits=8000,bits_per_key=15.625000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,2.000000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    9792  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,2.000000,bits=9792,bits_per_key=9.562500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,2.000000,bits=8000,bits_per_key=7.812500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    13632  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,2.000000,bits=13632,bits_per_key=6.656250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,2.000000,bits=14848,bits_per_key=7.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    21248  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,2.000000,bits=21248,bits_per_key=5.187500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,2.000000,bits=22912,bits_per_key=5.593750,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    36352  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,2.000000,bits=36352,bits_per_key=4.437500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,2.000000,bits=37312,bits_per_key=4.554688,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    66752  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,2.000000,bits=66752,bits_per_key=4.074219,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,2.000000,bits=68416,bits_per_key=4.175781,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    127360  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,2.000000,bits=127360,bits_per_key=3.886719,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,2.000000,bits=128320,bits_per_key=3.916016,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    248960  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,2.000000,bits=248960,bits_per_key=3.798828,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,2.000000,bits=250432,bits_per_key=3.821289,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    492032  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,2.000000,bits=492032,bits_per_key=3.753906,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,2.000000,bits=497984,bits_per_key=3.799316,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    978176  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,2.000000,bits=978176,bits_per_key=3.731445,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,2.000000,bits=984704,bits_per_key=3.756348,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    1950592  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,2.000000,bits=1950592,bits_per_key=3.720459,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,2.000000,bits=1955264,bits_per_key=3.729370,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    3895616  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,2.000000,bits=3895616,bits_per_key=3.715149,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,2.000000,bits=3901568,bits_per_key=3.720825,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.0 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    7785280  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,2.000000,bits=7785280,bits_per_key=3.712311,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,2.000000,bits=7788992,bits_per_key=3.714081,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    8128  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,2.250000,bits=8128,bits_per_key=15.875000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,2.250000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    10048  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,2.250000,bits=10048,bits_per_key=9.812500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,2.250000,bits=8576,bits_per_key=8.375000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    14208  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,2.250000,bits=14208,bits_per_key=6.937500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,2.250000,bits=15424,bits_per_key=7.531250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    22144  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,2.250000,bits=22144,bits_per_key=5.406250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,2.250000,bits=23488,bits_per_key=5.734375,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    38336  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,2.250000,bits=38336,bits_per_key=4.679688,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,2.250000,bits=39616,bits_per_key=4.835938,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    70656  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,2.250000,bits=70656,bits_per_key=4.312500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,2.250000,bits=71872,bits_per_key=4.386719,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    135232  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,2.250000,bits=135232,bits_per_key=4.126953,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,2.250000,bits=136384,bits_per_key=4.162109,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    264512  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,2.250000,bits=264512,bits_per_key=4.036133,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,2.250000,bits=265984,bits_per_key=4.058594,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    523264  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,2.250000,bits=523264,bits_per_key=3.992188,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,2.250000,bits=527936,bits_per_key=4.027832,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    1040640  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,2.250000,bits=1040640,bits_per_key=3.969727,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,2.250000,bits=1047488,bits_per_key=3.995850,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    2075520  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,2.250000,bits=2075520,bits_per_key=3.958740,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,2.250000,bits=2081408,bits_per_key=3.969971,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    4145408  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,2.250000,bits=4145408,bits_per_key=3.953369,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,2.250000,bits=4149824,bits_per_key=3.957581,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.25 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    8284864  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,2.250000,bits=8284864,bits_per_key=3.950531,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,2.250000,bits=8286656,bits_per_key=3.951385,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=512 seed_index=0 key_mode=multiplicative
+Bitarray    8256  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,512,2.500000,bits=8256,bits_per_key=16.125000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,512,2.500000,bits=6272,bits_per_key=12.250000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=1024 seed_index=0 key_mode=multiplicative
+Bitarray    10432  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1024,2.500000,bits=10432,bits_per_key=10.187500,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1024,2.500000,bits=8576,bits_per_key=8.375000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=2048 seed_index=0 key_mode=multiplicative
+Bitarray    14656  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2048,2.500000,bits=14656,bits_per_key=7.156250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2048,2.500000,bits=12608,bits_per_key=6.156250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=4096 seed_index=0 key_mode=multiplicative
+Bitarray    23168  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,4096,2.500000,bits=23168,bits_per_key=5.656250,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,4096,2.500000,bits=24064,bits_per_key=5.875000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=8192 seed_index=0 key_mode=multiplicative
+Bitarray    40384  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,8192,2.500000,bits=40384,bits_per_key=4.929688,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,8192,2.500000,bits=41920,bits_per_key=5.117188,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=16384 seed_index=0 key_mode=multiplicative
+Bitarray    74624  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,16384,2.500000,bits=74624,bits_per_key=4.554688,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,16384,2.500000,bits=75904,bits_per_key=4.632812,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=32768 seed_index=0 key_mode=multiplicative
+Bitarray    143360  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,32768,2.500000,bits=143360,bits_per_key=4.375000,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,32768,2.500000,bits=145024,bits_per_key=4.425781,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=65536 seed_index=0 key_mode=multiplicative
+Bitarray    280832  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,65536,2.500000,bits=280832,bits_per_key=4.285156,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,65536,2.500000,bits=281536,bits_per_key=4.295898,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=131072 seed_index=0 key_mode=multiplicative
+Bitarray    555776  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,131072,2.500000,bits=555776,bits_per_key=4.240234,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,131072,2.500000,bits=555136,bits_per_key=4.235352,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=262144 seed_index=0 key_mode=multiplicative
+Bitarray    1105664  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,262144,2.500000,bits=1105664,bits_per_key=4.217773,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,262144,2.500000,bits=1104064,bits_per_key=4.211670,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=524288 seed_index=0 key_mode=multiplicative
+Bitarray    2205504  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,524288,2.500000,bits=2205504,bits_per_key=4.206665,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,524288,2.500000,bits=2212160,bits_per_key=4.219360,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=1048576 seed_index=0 key_mode=multiplicative
+Bitarray    4405248  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,1048576,2.500000,bits=4405248,bits_per_key=4.201172,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,1048576,2.500000,bits=4410752,bits_per_key=4.206421,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> fixed gamma=2.5 n=2097152 seed_index=0 key_mode=multiplicative
+Bitarray    8805056  bits (100.00 %)   (array + ranks )
+Last level hash             0  bits (0.00 %) (nb in last level hash 0)
+summary,bbhash-cpp,space_bits,2097152,2.500000,bits=8805056,bits_per_key=4.198578,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative
+summary,better-mphf,space_bits,2097152,2.500000,bits=8808512,bits_per_key=4.200226,seed=4870315401550313391,offset=11131921045574106320,seed_index=0,key_mode=multiplicative,fastrange_mode=mul64
+==> finished csv=/u/devanshu/better-leveledmphf/bench-results/bits_per_key.csv log=/u/devanshu/better-leveledmphf/bench-results/bits_per_key.log

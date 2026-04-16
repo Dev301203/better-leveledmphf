@@ -1,5 +1,6 @@
 /target
 bench-results/*
+!bench-results/bits_per_key*
 !bench-results/serial-fixed.csv
 !bench-results/serial-fixed.log
 !bench-results/serial-auto.csv

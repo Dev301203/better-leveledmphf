@@ -23,6 +23,10 @@ impl BitSet {
         }
     }
 
+    pub(crate) fn storage_bytes(&self) -> usize {
+        self.data.capacity() * std::mem::size_of::<CacheLine>()
+    }
+
     #[inline(always)]
     pub(crate) fn set(&mut self, idx: usize) {
         debug_assert!(
@@ -62,6 +66,10 @@ impl RankedBitSet {
         }
 
         RankedBitSet { bs, rank_prefix }
+    }
+
+    pub(crate) fn storage_bytes(&self) -> usize {
+        self.bs.storage_bytes() + self.rank_prefix.capacity() * std::mem::size_of::<usize>()
     }
 
     // returns Some(rank) if the bit at idx is set, None otherwise

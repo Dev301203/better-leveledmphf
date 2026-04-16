@@ -25,11 +25,12 @@ struct Config {
     seed_index: u64,
     key_mode: KeyMode,
     fastrange_mode: FastRangeMode,
+    space_only: bool,
 }
 
 fn usage() -> ! {
     eprintln!(
-        "usage: bench_better_runner --n <usize> (--gamma <f64> | --auto-gamma [--gamma-base <f64>]) [--seed-index <u64>] [--seed <u64>] [--offset <u64>] [--key-mode <multiplicative|sequential|splitmix-random|clustered|high-bit-heavy>] [--fastrange-mode <low32|high32|mul64>] [--warmup <u32>] [--timed <u32>] [--lookup-timed <u32>]"
+        "usage: bench_better_runner --n <usize> (--gamma <f64> | --auto-gamma [--gamma-base <f64>]) [--seed-index <u64>] [--seed <u64>] [--offset <u64>] [--key-mode <multiplicative|sequential|splitmix-random|clustered|high-bit-heavy>] [--fastrange-mode <low32|high32|mul64>] [--space-only] [--warmup <u32>] [--timed <u32>] [--lookup-timed <u32>]"
     );
     process::exit(2);
 }
@@ -109,6 +110,7 @@ fn parse_args() -> Config {
         seed_index,
         key_mode,
         fastrange_mode,
+        space_only: args.iter().any(|a| a == "--space-only"),
     }
 }
 
@@ -176,6 +178,37 @@ fn emit_summary_row(impl_name: &str, phase: &str, n: usize, gamma: f64, cfg: &Co
     );
 }
 
+fn emit_space_rows(impl_name: &str, n: usize, gamma: f64, cfg: &Config, mphf: &LeveledMphf) {
+    let bits = mphf.storage_bits() as f64;
+    let bits_per_key = bits / cfg.n as f64;
+    let fastrange_mode = fastrange_mode_label(cfg.fastrange_mode);
+    println!(
+        "{impl_name},space_bits,{n},{gamma:.6},1,0,{bits:.6},{},{},{},{},{}",
+        cfg.seed,
+        cfg.offset,
+        cfg.seed_index,
+        cfg.key_mode.as_str(),
+        fastrange_mode
+    );
+    println!(
+        "{impl_name},space_bits_per_key,{n},{gamma:.6},1,0,{bits_per_key:.6},{},{},{},{},{}",
+        cfg.seed,
+        cfg.offset,
+        cfg.seed_index,
+        cfg.key_mode.as_str(),
+        fastrange_mode
+    );
+    eprintln!(
+        "summary,{impl_name},space_bits,{n},{gamma:.6},bits={:.0},bits_per_key={bits_per_key:.6},seed={},offset={},seed_index={},key_mode={},fastrange_mode={}",
+        bits,
+        cfg.seed,
+        cfg.offset,
+        cfg.seed_index,
+        cfg.key_mode.as_str(),
+        fastrange_mode
+    );
+}
+
 fn main() {
     let cfg = parse_args();
     let keys = make_keys_with_mode(cfg.n, cfg.key_mode, cfg.seed, cfg.offset);
@@ -183,6 +216,12 @@ fn main() {
     let gamma = gamma_label(&cfg);
 
     println!("impl,phase,n,gamma,threads,trial,ms,seed,offset,seed_index,key_mode,fastrange_mode");
+
+    if cfg.space_only {
+        let mphf = LeveledMphf::new_with_options(&keys, cfg.seed, cfg.offset, build_options(&cfg));
+        emit_space_rows(impl_name, cfg.n, gamma, &cfg, &mphf);
+        return;
+    }
 
     let build_samples = sample_after_warmup_raw(cfg.warmup, cfg.timed, || {
         let _ = LeveledMphf::new_with_options(&keys, cfg.seed, cfg.offset, build_options(&cfg));

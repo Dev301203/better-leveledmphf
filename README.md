@@ -68,8 +68,11 @@ The current paper figures are generated from these checked-in CSVs:
 - `bench-results/serial-auto.csv`
 - `bench-results/serial-keymode.csv`
 - `bench-results/serial-fastrange.csv`
+- `bench-results/bits_per_key.csv`
 
 `serial-fixed.csv` is used both for the fixed-gamma comparison and for the paper's seed-sensitivity analysis.
+
+`bits_per_key.csv` is used for the paper's exact final-size comparison between `better-mphf` and `bbhash-cpp`.
 
 `plot_paper_figures.py` merges the fixed and auto 16-seed benchmark CSVs into:
 
@@ -137,4 +140,21 @@ srun --partition cpunodes -c 12 --mem=24G -t 0-4:00 --pty env \
   MPHF_BENCH_FASTRANGE_MODES="low32 high32 mul64" \
   ./scripts/run_serial_bench.sh
 ```
+
+### Exact Bits-Per-Key Comparison
+
+```bash
+srun --partition cpunodes -c 12 --mem=24G -t 0-4:00 --pty env \
+  MPHF_BENCH_RUN_NAME=bits_per_key \
+  MPHF_BENCH_RUN_FIXED=1 \
+  MPHF_BENCH_RUN_BASELINES=1 \
+  MPHF_BENCH_RUN_AUTO=0 \
+  MPHF_BENCH_RUN_SPACE_ONLY=1 \
+  MPHF_BENCH_SEED_INDICES="0" \
+  MPHF_BENCH_KEY_MODES="multiplicative" \
+  MPHF_BENCH_FASTRANGE_MODES="mul64" \
+  ./scripts/run_serial_bench.sh
+```
+
+This benchmark emits only exact `space_bits` and `space_bits_per_key` rows for `better-mphf` and `bbhash-cpp`, and skips build/lookup timing rows.
 

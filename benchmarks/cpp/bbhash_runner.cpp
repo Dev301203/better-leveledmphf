@@ -4,7 +4,7 @@
 //   bbhash_runner --n <nelem> --gamma <gamma>
 //     [--seed-index <u64>] [--seed <u64>] [--offset <u64>]
 //     [--key-mode <multiplicative|sequential|splitmix-random|clustered|high-bit-heavy>]
-//     [--warmup <u32>] [--timed <u32>] [--lookup-timed <u32>] [--threads <int>]
+//     [--warmup <u32>] [--timed <u32>] [--lookup-timed <u32>] [--space-only] [--threads <int>]
 //
 // CSV to stdout:
 //   impl,phase,n,gamma,threads,trial,ms,seed,offset,seed_index,key_mode,fastrange_mode
@@ -105,11 +105,12 @@ struct Config {
     uint64_t offset = DEFAULT_OFFSET;
     uint64_t seed_index = 0;
     KeyMode key_mode = KeyMode::Multiplicative;
+    bool space_only = false;
 };
 
 [[noreturn]] static void usage() {
     std::cerr
-        << "usage: bbhash_runner --n <nelem> --gamma <gamma> [--seed-index <u64>] [--seed <u64>] [--offset <u64>] [--key-mode <multiplicative|sequential|splitmix-random|clustered|high-bit-heavy>] [--warmup <u32>] [--timed <u32>] [--lookup-timed <u32>] [--threads <int>]\n";
+        << "usage: bbhash_runner --n <nelem> --gamma <gamma> [--seed-index <u64>] [--seed <u64>] [--offset <u64>] [--key-mode <multiplicative|sequential|splitmix-random|clustered|high-bit-heavy>] [--warmup <u32>] [--timed <u32>] [--lookup-timed <u32>] [--space-only] [--threads <int>]\n";
     std::exit(2);
 }
 
@@ -214,6 +215,11 @@ static Config parse_args(int argc, char** argv) {
     if (cfg.threads < 1) {
         cfg.threads = 1;
     }
+    for (int i = 1; i < argc; ++i) {
+        if (match_flag(argv[i], "--space-only")) {
+            cfg.space_only = true;
+        }
+    }
     return cfg;
 }
 
@@ -284,12 +290,42 @@ static void print_summary(const char* phase, const Config& cfg, const std::vecto
               << ",seed_index=" << cfg.seed_index << ",key_mode=" << key_mode_name(cfg.key_mode) << "\n";
 }
 
+static void print_space_rows(uint64_t bits, const Config& cfg) {
+    const double bits_per_key = static_cast<double>(bits) / static_cast<double>(cfg.n);
+    std::cout << std::fixed << std::setprecision(6)
+              << "bbhash-cpp,space_bits," << cfg.n << ',' << cfg.gamma << ',' << cfg.threads
+              << ",0," << static_cast<double>(bits) << ',' << cfg.seed << ',' << cfg.offset << ','
+              << cfg.seed_index << ',' << key_mode_name(cfg.key_mode) << ",na\n";
+    std::cout << std::fixed << std::setprecision(6)
+              << "bbhash-cpp,space_bits_per_key," << cfg.n << ',' << cfg.gamma << ',' << cfg.threads
+              << ",0," << bits_per_key << ',' << cfg.seed << ',' << cfg.offset << ','
+              << cfg.seed_index << ',' << key_mode_name(cfg.key_mode) << ",na\n";
+    std::cerr << "summary,bbhash-cpp,space_bits," << cfg.n << ',' << std::fixed << std::setprecision(6)
+              << cfg.gamma << ",bits=" << bits << ",bits_per_key=" << bits_per_key << ",seed=" << cfg.seed
+              << ",offset=" << cfg.offset << ",seed_index=" << cfg.seed_index << ",key_mode="
+              << key_mode_name(cfg.key_mode) << "\n";
+}
+
 int main(int argc, char** argv) {
     const Config cfg = parse_args(argc, argv);
     const std::vector<uint64_t> keys = make_keys(cfg);
 
     std::cout
         << "impl,phase,n,gamma,threads,trial,ms,seed,offset,seed_index,key_mode,fastrange_mode\n";
+
+    if (cfg.space_only) {
+        boomphf::mphf<uint64_t, boomphf::SingleHashFunctor<uint64_t>> mphf(
+            cfg.n,
+            keys,
+            cfg.threads,
+            cfg.gamma,
+            false,
+            false,
+            0.0f);
+        const uint64_t bits = static_cast<uint64_t>(mphf.totalBitSize());
+        print_space_rows(bits, cfg);
+        return 0;
+    }
 
     using clock = std::chrono::steady_clock;
     for (unsigned i = 0; i < cfg.warmup; ++i) {
