@@ -150,7 +150,14 @@ fn lookup_samples(keys: &[u64], cfg: &Config, timed: u32) -> Vec<f64> {
     samples
 }
 
-fn emit_raw_rows(impl_name: &str, phase: &str, n: usize, gamma: f64, cfg: &Config, samples: &[f64]) {
+fn emit_raw_rows(
+    impl_name: &str,
+    phase: &str,
+    n: usize,
+    gamma: f64,
+    cfg: &Config,
+    samples: &[f64],
+) {
     let fastrange_mode = fastrange_mode_label(cfg.fastrange_mode);
     for (trial, ms) in samples.iter().enumerate() {
         println!(
@@ -164,7 +171,14 @@ fn emit_raw_rows(impl_name: &str, phase: &str, n: usize, gamma: f64, cfg: &Confi
     }
 }
 
-fn emit_summary_row(impl_name: &str, phase: &str, n: usize, gamma: f64, cfg: &Config, samples: &[f64]) {
+fn emit_summary_row(
+    impl_name: &str,
+    phase: &str,
+    n: usize,
+    gamma: f64,
+    cfg: &Config,
+    samples: &[f64],
+) {
     let mut sorted = samples.to_vec();
     let (med, min, max) = median_min_max(&mut sorted);
     let avg = mean(samples);

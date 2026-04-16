@@ -254,12 +254,11 @@ fn par_count_pass(
                 buf.resize(num_slots, 0);
                 buf.fill(0);
                 for &k in chunk {
-                    let bit_idx =
-                        fastrange(
-                            splitmix.hash_with_retry_seed(k, retry_seed),
-                            num_slots,
-                            fastrange_mode,
-                        );
+                    let bit_idx = fastrange(
+                        splitmix.hash_with_retry_seed(k, retry_seed),
+                        num_slots,
+                        fastrange_mode,
+                    );
                     buf[bit_idx] = buf[bit_idx].saturating_add(1);
                 }
                 buf.clone()
